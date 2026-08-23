@@ -1,0 +1,52 @@
+bundle: desktop
+description: >
+  Linux desktop backends for the phone. Pluggable: KeX today, AVF later.
+tools:
+  - id: avf-terminal
+    name: Android Linux Terminal
+    desc: Not an app. Android 15+ ships a native Linux terminal on the Android Virtualization Framework — a real VM with a real kernel, not PRoot. It will obsolete most of this category.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    notes: Enable in Developer Options where your device supports it. Design the Linux layer with a pluggable backend so you can move to this.
+    install:
+      - {provider: builtin, id: avf}
+
+  - id: droiddesk
+    name: DroidDesk
+    desc: Community desktop option. Supported as a documented recipe that shells out to their installer, never as vendored code.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: orailnoor/DroidDesk
+    checked: 2026-08-23
+    flags: [gpl]
+    notes: GPL-3.0. Bundling or linking its code would make androidWTF GPL-3.0 too. Their own COMPLIANCE.md flags unresolved provenance issues.
+    install:
+      - {provider: obtainium, source: GitHub, id: orailnoor/DroidDesk}
+      - {provider: github, id: orailnoor/DroidDesk}
+
+  - id: nethunter-kex
+    name: NetHunter KeX
+    desc: Full Kali desktop over VNC. Offensive Security maintained, works in NetHunter Rootless on a stock phone. The recommended desktop backend.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    flags: [essential]
+    notes: Needs a VNC client — RealVNC Viewer is the reliable one.
+    install:
+      - {provider: nethunter, id: kex}
+
+  - id: termux-x11-desktop
+    name: 'Termux:X11 + XFCE'
+    desc: A lighter desktop straight out of Termux, no chroot involved. Faster than VNC, fewer batteries included.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: termux/termux-x11
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: GitHub, id: termux/termux-x11}
+      - {provider: github, id: termux/termux-x11}

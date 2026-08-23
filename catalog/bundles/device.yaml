@@ -1,0 +1,148 @@
+bundle: device
+description: >
+  App and device control: Shizuku, debloat, work-profile isolation, and the
+  root stack.
+tools:
+  - id: aurora-store
+    name: Aurora Store
+    desc: Play Store apps without a Google account, using anonymous sessions.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:com.aurora.store'
+    checked: 2026-08-23
+    notes: Anonymous sessions break periodically. Paid apps still need a real account.
+    install:
+      - {provider: obtainium, source: FDroid, id: com.aurora.store}
+      - {provider: fdroid, id: com.aurora.store}
+
+  - id: insular
+    name: Insular
+    desc: Work profile isolation, a fork of Island. Alternative to Shelter — pick one.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:com.oasisfeng.island.fdroid'
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: FDroid, id: com.oasisfeng.island.fdroid}
+      - {provider: fdroid, id: com.oasisfeng.island.fdroid}
+
+  - id: obtainium
+    name: Obtainium
+    desc: Installs and auto-updates sideloaded apps straight from GitHub Releases, F-Droid and arbitrary URLs. Without this, maintaining seventy sideloaded APKs by hand is what kills the project in six months.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: ImranR98/Obtainium
+    checked: 2026-08-23
+    flags: [essential]
+    notes: androidWTF ships an Obtainium config you can import in one go.
+    install:
+      - {provider: obtainium, source: GitHub, id: ImranR98/Obtainium}
+      - {provider: github, id: ImranR98/Obtainium}
+
+  - id: shelter
+    name: Shelter
+    desc: Runs the catalogue inside an isolated Android work profile you can freeze when you are not on an engagement. Keeps the pentest apps away from your banking apps.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:net.typeblog.shelter'
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: obtainium, source: FDroid, id: net.typeblog.shelter}
+      - {provider: fdroid, id: net.typeblog.shelter}
+
+  - id: shizuku
+    name: Shizuku
+    desc: Grants apps ADB-level privileges with no root, by pairing over wireless debugging. On Android 11+ this needs no PC at all. The single highest-value install in the catalogue after Termux.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: RikkaApps/Shizuku
+    checked: 2026-08-23
+    flags: [essential]
+    notes: Installing it is Tier 0; the privileges it unlocks are Tier 1. Must be re-paired after every reboot unless rooted.
+    install:
+      - {provider: obtainium, source: GitHub, id: RikkaApps/Shizuku}
+      - {provider: github, id: RikkaApps/Shizuku}
+
+  - id: app-manager
+    name: App Manager
+    desc: Manifest viewer, component blocker, AppOps control, signature checks, APK extraction and tracker analysis. Best-in-class, and directly useful for mobile app assessments.
+    tier: 1
+    profiles: [shizuku, rooted, nethunter]
+    status: maintained
+    upstream: MuntashirAkon/AppManager
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: obtainium, source: GitHub, id: MuntashirAkon/AppManager}
+      - {provider: github, id: MuntashirAkon/AppManager}
+
+  - id: canta
+    name: Canta
+    desc: Uninstall system bloat through Shizuku, with a crowd-sourced safety rating per package. The debloat engine.
+    tier: 1
+    profiles: [shizuku, rooted, nethunter]
+    status: maintained
+    upstream: samolego/Canta
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: GitHub, id: samolego/Canta}
+      - {provider: github, id: samolego/Canta}
+
+  - id: kernelsu
+    name: KernelSU
+    desc: Kernel-based root, an alternative to Magisk on supported kernels.
+    tier: 2
+    profiles: [rooted, nethunter]
+    status: maintained
+    upstream: tiann/KernelSU
+    checked: 2026-08-23
+    flags: [integrity]
+    install:
+      - {provider: obtainium, source: GitHub, id: tiann/KernelSU}
+      - {provider: github, id: tiann/KernelSU}
+
+  - id: lsposed
+    name: LSPosed
+    desc: Xposed framework for hooking app internals at runtime. The base for SSL unpinning modules.
+    tier: 2
+    profiles: [rooted, nethunter]
+    status: maintained
+    upstream: LSPosed/LSPosed
+    checked: 2026-08-23
+    flags: [integrity]
+    install:
+      - {provider: obtainium, source: GitHub, id: LSPosed/LSPosed}
+      - {provider: github, id: LSPosed/LSPosed}
+
+  - id: magisk
+    name: Magisk
+    desc: Systemless root. The gate for everything in Tier 2.
+    tier: 2
+    profiles: [rooted, nethunter]
+    status: maintained
+    upstream: topjohnwu/Magisk
+    checked: 2026-08-23
+    flags: [integrity]
+    notes: Breaks Play Integrity. Banking, payment and MDM apps will refuse to run.
+    install:
+      - {provider: obtainium, source: GitHub, id: topjohnwu/Magisk}
+      - {provider: github, id: topjohnwu/Magisk}
+
+  - id: ssl-unpinning
+    name: TrustMeAlready
+    desc: Xposed module that disables SSL verification and pinning system-wide, so an intercepting proxy can see app traffic.
+    tier: 2
+    profiles: [rooted, nethunter]
+    status: maintained
+    upstream: ViRb3/TrustMeAlready
+    checked: 2026-08-23
+    notes: Needed for most real mobile app assessments. objection can do the same per-process without a module.
+    install:
+      - {provider: obtainium, source: GitHub, id: ViRb3/TrustMeAlready}
+      - {provider: github, id: ViRb3/TrustMeAlready}

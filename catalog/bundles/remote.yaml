@@ -1,0 +1,123 @@
+bundle: remote
+description: >
+  Remote access, file transfer and getting artifacts off the device.
+tools:
+  - id: amaze
+    name: Amaze File Manager
+    desc: Open source file manager, root-aware. The alternative to Material Files.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:com.amaze.filemanager'
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: FDroid, id: com.amaze.filemanager}
+      - {provider: fdroid, id: com.amaze.filemanager}
+
+  - id: kde-connect
+    name: KDE Connect
+    desc: Shared clipboard, file push and remote input between the phone and your laptop.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:org.kde.kdeconnect_tp'
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: FDroid, id: org.kde.kdeconnect_tp}
+      - {provider: fdroid, id: org.kde.kdeconnect_tp}
+
+  - id: localsend
+    name: LocalSend
+    desc: AirDrop-equivalent over the local network, cross platform, open source.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: localsend/localsend
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: GitHub, id: localsend/localsend}
+      - {provider: github, id: localsend/localsend}
+
+  - id: material-files
+    name: Material Files
+    desc: Open source file manager with SMB, SFTP and FTP built in. Actively maintained.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:me.zhanghai.android.files'
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: obtainium, source: FDroid, id: me.zhanghai.android.files}
+      - {provider: fdroid, id: me.zhanghai.android.files}
+
+  - id: ms-rdp
+    name: Microsoft Remote Desktop
+    desc: RDP into Windows targets and jump boxes.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.microsoft.rdc.androidx'
+    checked: 2026-08-23
+    install:
+      - {provider: play, id: com.microsoft.rdc.androidx}
+
+  - id: openssh
+    name: OpenSSH
+    desc: sshd on the phone as well as ssh from it. The phone becomes something you can reach.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    flags: [essential]
+    notes: Must listen above port 1024 without root. 8022 is the Termux convention.
+    install:
+      - {provider: pkg, id: openssh}
+
+  - id: realvnc
+    name: RealVNC Viewer
+    desc: Required for NetHunter KeX, and generally the most reliable VNC client on Android.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.realvnc.viewer.android'
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: play, id: com.realvnc.viewer.android}
+
+  - id: rsync
+    name: rsync
+    desc: Move artifacts around properly, resumable, over SSH.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    install:
+      - {provider: pkg, id: rsync}
+
+  - id: rustdesk
+    name: RustDesk
+    desc: Open source remote desktop with a self-hostable relay. Fits a homelab better than any commercial option.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: rustdesk/rustdesk
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: GitHub, id: rustdesk/rustdesk}
+      - {provider: github, id: rustdesk/rustdesk}
+
+  - id: syncthing
+    name: Syncthing-Fork
+    desc: Continuous peer-to-peer sync with no cloud. This is how engagement artifacts get off the phone and onto your homelab without touching a third party.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:com.github.catfriend1.syncthingfork'
+    checked: 2026-08-23
+    flags: [essential]
+    notes: The original com.nutomic.syncthingandroid was discontinued and pulled from F-Droid. This fork is the maintained one.
+    install:
+      - {provider: obtainium, source: FDroid, id: com.github.catfriend1.syncthingfork}
+      - {provider: fdroid, id: com.github.catfriend1.syncthingfork}

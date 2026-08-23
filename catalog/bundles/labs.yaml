@@ -1,0 +1,113 @@
+bundle: labs
+description: >
+  Deliberately vulnerable targets to practise against. PAUSED — not in any
+  profile yet.
+tools:
+  - id: androgoat
+    name: AndroGoat
+    desc: Kotlin vulnerable app with a broad, well-labelled issue set.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: satishpatnayak/AndroGoat
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: GitHub, id: satishpatnayak/AndroGoat}
+      - {provider: github, id: satishpatnayak/AndroGoat}
+
+  - id: diva
+    name: DIVA
+    desc: Damn Insecure and Vulnerable App. The standard first target for Android app assessment practice.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: payatu/diva-android
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: obtainium, source: GitHub, id: payatu/diva-android}
+      - {provider: github, id: payatu/diva-android}
+
+  - id: dvwa
+    name: DVWA
+    desc: The classic. Needs PHP and MariaDB in Termux, which is more setup than Juice Shop but works.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: digininja/DVWA
+    checked: 2026-08-23
+    install:
+      - {provider: git, id: 'https://github.com/digininja/DVWA'}
+
+  - id: insecurebankv2
+    name: InsecureBankv2
+    desc: Vulnerable banking app with a companion backend, so you get network issues as well as app ones.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: dineshshetty/Android-InsecureBankv2
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: GitHub, id: dineshshetty/Android-InsecureBankv2}
+      - {provider: github, id: dineshshetty/Android-InsecureBankv2}
+
+  - id: insecureshop
+    name: InsecureShop
+    desc: Modern intentionally vulnerable Android app, covering current issue classes rather than 2015 ones.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: hax0rgb/InsecureShop
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: GitHub, id: hax0rgb/InsecureShop}
+      - {provider: github, id: hax0rgb/InsecureShop}
+
+  - id: juice-shop
+    name: OWASP Juice Shop
+    desc: The web target. Node, so it runs directly in Termux with no Docker and no root.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    flags: [essential]
+    notes: 'In the TUR user repo, so run ''pkg install tur-repo'' first. Docker does not work reliably on non-rooted Android, so do not build the lab story around it.'
+    install:
+      - {provider: pkg, id: juice-shop, repo: tur}
+
+  - id: pivaa
+    name: PIVAA
+    desc: Purposely Insecure and Vulnerable Android Application.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: HTBridge/pivaa
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: GitHub, id: HTBridge/pivaa}
+      - {provider: github, id: HTBridge/pivaa}
+
+  - id: uncrackable
+    name: OWASP MASTG Crackmes
+    desc: UnCrackable levels 1 to 4. Root detection, anti-tamper, native code, obfuscation.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: OWASP/mastg
+    checked: 2026-08-23
+    flags: [essential]
+    notes: Levels 3 and 4 realistically need Frida, so Tier 2.
+    install:
+      - {provider: obtainium, source: GitHub, id: OWASP/mastg}
+      - {provider: github, id: OWASP/mastg}
+
+  - id: vampi
+    name: VAmPI
+    desc: Deliberately vulnerable API, Python. Good pairing with Reqable on the same device.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: erev0s/VAmPI
+    checked: 2026-08-23
+    install:
+      - {provider: git, id: 'https://github.com/erev0s/VAmPI'}

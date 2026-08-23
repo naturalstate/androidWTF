@@ -1,0 +1,77 @@
+bundle: wireless
+description: >
+  Wardriving and wireless attack tooling. Most of it needs a NetHunter kernel
+  and an external adapter.
+tools:
+  - id: wifi-warden
+    name: WiFi Warden
+    desc: WPS analysis and network detail. Legally sensitive — connecting to a network you do not own is a CFAA problem regardless of how easy the app makes it.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.xti.wifiwarden'
+    checked: 2026-08-23
+    flags: [legal]
+    license: freemium
+    notes: Authorised engagements only, with the technique named in scope.
+    install:
+      - {provider: play, id: com.xti.wifiwarden}
+
+  - id: wigle
+    name: WiGLE WiFi Wardriving
+    desc: Logs every network you drive past with GPS, and exports CSV. Works on a completely stock phone.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:net.wigle.wigleandroid'
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: obtainium, source: FDroid, id: net.wigle.wigleandroid}
+      - {provider: fdroid, id: net.wigle.wigleandroid}
+
+  - id: aircrack-ng
+    name: aircrack-ng suite
+    desc: The classic wireless attack suite. Everything in it needs monitor mode.
+    tier: 3
+    profiles: [nethunter]
+    status: maintained
+    checked: 2026-08-23
+    flags: [exthw]
+    notes: Internal Android chipsets do not do monitor mode. You need a NetHunter kernel, and in practice an external adapter over OTG.
+    install:
+      - {provider: nethunter, id: aircrack-ng}
+
+  - id: hcxdumptool
+    name: hcxdumptool
+    desc: PMKID and handshake capture, the modern path to WPA2 material.
+    tier: 3
+    profiles: [nethunter]
+    status: maintained
+    checked: 2026-08-23
+    flags: [exthw]
+    notes: Capture on the phone, crack on your homelab. There is no usable GPU path on Android.
+    install:
+      - {provider: nethunter, id: hcxdumptool}
+
+  - id: kismet
+    name: Kismet
+    desc: Wireless detector, sniffer and IDS. Wants monitor mode on a real interface.
+    tier: 3
+    profiles: [nethunter]
+    status: maintained
+    checked: 2026-08-23
+    flags: [exthw]
+    install:
+      - {provider: nethunter, id: kismet}
+
+  - id: wifite2
+    name: Wifite2
+    desc: Automation wrapper over the aircrack suite. Same monitor mode requirement.
+    tier: 3
+    profiles: [nethunter]
+    status: maintained
+    checked: 2026-08-23
+    flags: [exthw]
+    install:
+      - {provider: nethunter, id: wifite}

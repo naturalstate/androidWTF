@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+#
+# androidWTF command entry point.
+#
+# Thin front door over the engine, mirroring windowsWTF's wtf.cmd -> wtf.ps1 so
+# the same verbs work on both platforms. This file contains NO tool logic: it
+# resolves the repo root, makes sure Python is present, and dispatches.
+#
+#   wtf doctor
+#   wtf list      --profile android-stock
+#   wtf install   --profile android-stock [--dry-run]
+#   wtf catalogue [--bundle network]
+#
+# Nothing is installed until an explicit `install`, and `install` refuses to run
+# steps above the device's own tier.
+
+set -euo pipefail
+
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+BOLD=$'\033[1m'; YELLOW=$'\033[33m'; RESET=$'\033[0m'
+warn() { printf '%s%s%s\n' "$YELLOW" "$*" "$RESET"; }
+
+# doctor is pure bash so it works before anything is installed.
+case "${1:-help}" in
+	doctor)
+		exec "$HERE/preflight.sh"
+		;;
+esac
+
+if ! command -v python3 >/dev/null 2>&1; then
+	warn "Python is required for everything except 'wtf doctor'."
+	printf 'Install it now with pkg? [y/N] '
+	read -r reply
+	case "$reply" in
+		[yY]*) pkg install -y python ;;
+		*) warn "Install it and re-run: pkg install -y python"; exit 1 ;;
+	esac
+fi
+
+exec python3 "$HERE/wtf.py" "$@"

@@ -1,0 +1,77 @@
+bundle: credaccess
+description: >
+  Password managers, TOTP and engagement-scoped credential storage.
+tools:
+  - id: aegis
+    name: Aegis Authenticator
+    desc: Open source TOTP with an encrypted, exportable vault. Prefer it over Google Authenticator — you can actually get your seeds back out.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:com.beemdevelopment.aegis'
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: obtainium, source: FDroid, id: com.beemdevelopment.aegis}
+      - {provider: fdroid, id: com.beemdevelopment.aegis}
+
+  - id: bitwarden
+    name: Bitwarden
+    desc: Password manager. Self-hostable with Vaultwarden if you would rather not use their cloud.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: bitwarden/android
+    checked: 2026-08-23
+    flags: [essential]
+    license: freemium
+    notes: No longer in the main F-Droid repo — GitHub Releases or Play.
+    install:
+      - {provider: obtainium, source: GitHub, id: bitwarden/android}
+      - {provider: github, id: bitwarden/android}
+
+  - id: google-authenticator
+    name: Google Authenticator
+    desc: Same reasoning. Keep it for client accounts, not your own.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.google.android.apps.authenticator2'
+    checked: 2026-08-23
+    install:
+      - {provider: play, id: com.google.android.apps.authenticator2}
+
+  - id: hashcat-note
+    name: Cracking — do it elsewhere
+    desc: Not an app. There is no usable GPU acceleration path for hashcat on Android. Capture on the phone, crack on the homelab.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    notes: john the ripper runs in Termux on CPU, and is slow enough to be a novelty.
+    install:
+      - {provider: builtin, id: hashcat}
+
+  - id: keepassdx
+    name: KeePassDX
+    desc: Offline KDBX vault. Useful for engagement-scoped credentials you want kept out of your personal manager entirely.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:com.kunzisoft.keepass.libre'
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: obtainium, source: FDroid, id: com.kunzisoft.keepass.libre}
+      - {provider: fdroid, id: com.kunzisoft.keepass.libre}
+
+  - id: ms-authenticator
+    name: Microsoft Authenticator
+    desc: Needed for client Entra tenants whether you like it or not.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.azure.authenticator'
+    checked: 2026-08-23
+    install:
+      - {provider: play, id: com.azure.authenticator}

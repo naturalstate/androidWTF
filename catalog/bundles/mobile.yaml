@@ -1,0 +1,103 @@
+bundle: mobile
+description: >
+  Mobile application assessment: decompile, patch, hook, intercept.
+tools:
+  - id: apk-analyzer
+    name: APK Analyzer
+    desc: Quick on-device look at permissions, activities, certificates and manifest.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:sk.styk.martin.apkanalyzer'
+    checked: 2026-08-23
+    install:
+      - {provider: play, id: sk.styk.martin.apkanalyzer}
+
+  - id: apksigner
+    name: apksigner / zipalign
+    desc: Re-sign and align a patched APK so the device will install it.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    notes: Under developer verification your own signing key will need to be registered to install on a certified device without the advanced flow.
+    install:
+      - {provider: pkg, id: apksigner}
+
+  - id: apktool
+    name: apktool
+    desc: Smali disassembly and rebuild. For patching an app rather than just reading it.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: pkg, id: apktool}
+
+  - id: ecliptic
+    name: Ecliptic
+    desc: Technology stack detection. First-party androidWTF tooling.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    install:
+      - {provider: androidwtf, id: ecliptic}
+
+  - id: jadx
+    name: jadx
+    desc: Decompiles an APK to readable Java. Runs fine in Termux with a JDK, and this is where most mobile assessment actually starts.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: pkg, id: jadx}
+
+  - id: mobsf
+    name: MobSF
+    desc: Static and dynamic analysis framework. Technically runs in Termux; realistically run it on your homelab and reach it from the phone.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: MobSF/Mobile-Security-Framework-MobSF
+    checked: 2026-08-23
+    notes: Heavy. A phone is the wrong place for this.
+    install:
+      - {provider: git, id: 'https://github.com/MobSF/Mobile-Security-Framework-MobSF'}
+
+  - id: adb-shizuku
+    name: On-device adb shell
+    desc: Not an app. With Shizuku paired you get pm, dumpsys, content and settings from a local shell — most of what you would otherwise plug into a laptop for.
+    tier: 1
+    profiles: [shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: builtin, id: adb}
+
+  - id: frida
+    name: Frida server
+    desc: Runtime instrumentation — hook methods, dump arguments, bypass checks live.
+    tier: 2
+    profiles: [rooted, nethunter]
+    status: maintained
+    upstream: frida/frida
+    checked: 2026-08-23
+    notes: The server binary needs root. The client can run in Termux or on your laptop.
+    install:
+      - {provider: obtainium, source: GitHub, id: frida/frida}
+      - {provider: github, id: frida/frida}
+
+  - id: objection
+    name: objection
+    desc: 'Frida wrapper that does the common jobs without writing hooks: SSL pinning bypass, storage dump, class enumeration.'
+    tier: 2
+    profiles: [rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    install:
+      - {provider: pip, id: objection}

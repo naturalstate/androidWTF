@@ -1,0 +1,94 @@
+bundle: recon
+description: >
+  OSINT and pre-engagement reconnaissance, including offline mapping.
+tools:
+  - id: amass
+    name: amass
+    desc: Subdomain enumeration and attack surface mapping.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: github.com/owasp-amass/amass/v4/...
+    checked: 2026-08-23
+    install:
+      - {provider: go, id: github.com/owasp-amass/amass/v4/...}
+
+  - id: google-earth
+    name: Google Earth
+    desc: Aerial and street-level site recon before a physical engagement.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.google.earth'
+    checked: 2026-08-23
+    install:
+      - {provider: play, id: com.google.earth}
+
+  - id: organic-maps
+    name: Organic Maps
+    desc: Offline maps with no account and no tracking. For physical engagements where you need site layout with no signal.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:app.organicmaps'
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: obtainium, source: FDroid, id: app.organicmaps}
+      - {provider: fdroid, id: app.organicmaps}
+
+  - id: osmand
+    name: OsmAnd
+    desc: Offline maps with heavier features — routing profiles, custom overlays, GPX recording.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:net.osmand.plus'
+    checked: 2026-08-23
+    license: freemium
+    install:
+      - {provider: obtainium, source: FDroid, id: net.osmand.plus}
+      - {provider: fdroid, id: net.osmand.plus}
+
+  - id: sherlock
+    name: Sherlock
+    desc: Username enumeration across hundreds of sites.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    install:
+      - {provider: pip, id: sherlock-project}
+
+  - id: shodan
+    name: Shodan
+    desc: Host and service intelligence lookup.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:io.shodan.app'
+    checked: 2026-08-23
+    license: freemium
+    install:
+      - {provider: play, id: io.shodan.app}
+
+  - id: subfinder
+    name: subfinder
+    desc: Fast passive subdomain discovery.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: github.com/projectdiscovery/subfinder/v2/cmd/subfinder
+    checked: 2026-08-23
+    install:
+      - {provider: go, id: github.com/projectdiscovery/subfinder/v2/cmd/subfinder}
+
+  - id: theharvester
+    name: theHarvester
+    desc: Email, subdomain and host gathering from public sources.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    install:
+      - {provider: pip, id: theHarvester}

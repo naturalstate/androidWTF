@@ -1,0 +1,14 @@
+profile: android-minimal
+description: >
+  Termux and a working shell, nothing else. The floor everything is built on,
+  and a sane thing to put on a phone you have not decided about yet.
+requires_tier: 0
+reversible: true
+
+modules:
+  - termux:  { shell: zsh, prompt: starship, font: nerd, storage: true }
+  - layout:  { home: ~/wtf, widgets: false }
+
+bundles:
+  - core
+  - dev

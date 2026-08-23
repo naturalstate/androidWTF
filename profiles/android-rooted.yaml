@@ -1,0 +1,38 @@
+profile: android-rooted
+description: >
+  Magisk or KernelSU. Unlocks raw sockets, privileged ports, Frida, real tcpdump
+  and LSPosed. This is also where Play Integrity stops working — use a dedicated
+  device.
+requires_tier: 2
+reversible: false
+breaks_play_integrity: true
+
+modules:
+  - termux:  { shell: zsh, prompt: starship, font: nerd, storage: true }
+  - layout:  { home: ~/wtf, widgets: true }
+  - isolate: { work_profile: strongly_recommended }
+  - shizuku: { pair: root, remind_on_boot: false }
+  - repos:   { root_repo: true, tur_repo: true }
+
+# Banking, payment, ticketing and MDM-enrolled apps will refuse to run once the
+# bootloader is unlocked, whether or not root is actually active. Unlocking is
+# irreversible on many devices and blows the Knox fuse on Samsung.
+
+bundles:
+  - core
+  - dev
+  - device
+  - network
+  - web
+  - mobile
+  - recon
+  - egress
+  - credaccess
+  - remote
+  - reporting
+  - hardware
+  - radio
+  - desktop
+  - comms
+  - automation
+  - reference

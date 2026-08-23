@@ -1,0 +1,137 @@
+bundle: egress
+description: >
+  Firewall, VPN, Tor and proxying: control over where the traffic goes.
+tools:
+  - id: cloudflared
+    name: cloudflared
+    desc: Expose a service running on the phone to the internet without a public IP.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    notes: Also useful for getting a callback to a device behind carrier NAT.
+    install:
+      - {provider: pkg, id: cloudflared}
+
+  - id: every-proxy
+    name: Every Proxy
+    desc: 'Turns the phone into an HTTP and SOCKS5 proxy. Genuinely handy for pivoting a laptop through the phone''s connection.'
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.gorillasoftware.everyproxy'
+    checked: 2026-08-23
+    license: freemium
+    install:
+      - {provider: play, id: com.gorillasoftware.everyproxy}
+
+  - id: netguard
+    name: NetGuard
+    desc: Per-app firewall with no root, via the VPN service. The simpler, more predictable option.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: M66B/NetGuard
+    checked: 2026-08-23
+    notes: Same VPN slot conflict. Pick one of NetGuard or RethinkDNS.
+    install:
+      - {provider: obtainium, source: GitHub, id: M66B/NetGuard}
+      - {provider: github, id: M66B/NetGuard}
+
+  - id: openvpn-android
+    name: OpenVPN for Android
+    desc: Open source OpenVPN client. Plenty of clients still hand you a .ovpn file.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:de.blinkt.openvpn'
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: FDroid, id: de.blinkt.openvpn}
+      - {provider: fdroid, id: de.blinkt.openvpn}
+
+  - id: orbot
+    name: Orbot
+    desc: Tor as a transparent proxy or VPN for selected apps.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: guardianproject/orbot-android
+    checked: 2026-08-23
+    notes: Not in the main F-Droid repo — Guardian Project run their own, or take it from GitHub Releases.
+    install:
+      - {provider: obtainium, source: GitHub, id: guardianproject/orbot-android}
+      - {provider: github, id: guardianproject/orbot-android}
+
+  - id: proxychains
+    name: proxychains-ng
+    desc: Force any Termux CLI tool through a SOCKS proxy.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    install:
+      - {provider: pkg, id: proxychains-ng}
+
+  - id: rethinkdns
+    name: RethinkDNS
+    desc: Per-app firewall, DNS filtering and a WireGuard client in one. Arguably strictly better than NetGuard now.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: celzero/rethink-app
+    checked: 2026-08-23
+    flags: [essential]
+    notes: Uses the VPN slot, so it conflicts with PCAPdroid and other VPN-mode apps.
+    install:
+      - {provider: obtainium, source: GitHub, id: celzero/rethink-app}
+      - {provider: github, id: celzero/rethink-app}
+
+  - id: tailscale
+    name: Tailscale
+    desc: Mesh VPN over WireGuard with SSO. Gets the phone onto your homelab with no port forwarding.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.tailscale.ipn'
+    checked: 2026-08-23
+    license: freemium
+    install:
+      - {provider: play, id: com.tailscale.ipn}
+
+  - id: tor-browser
+    name: Tor Browser
+    desc: The browser, not the proxy. Use with or without Orbot.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:org.torproject.torbrowser'
+    checked: 2026-08-23
+    notes: Not in the main F-Droid repo. The Guardian Project repo carries it too.
+    install:
+      - {provider: play, id: org.torproject.torbrowser}
+
+  - id: twingate
+    name: Twingate
+    desc: Zero-trust network access. Alternative path to the same homelab.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.twingate'
+    checked: 2026-08-23
+    license: freemium
+    install:
+      - {provider: play, id: com.twingate}
+
+  - id: wireguard
+    name: WireGuard
+    desc: The VPN you will actually use for lab and client access. Fast, simple config, no daemon to babysit.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.wireguard.android'
+    checked: 2026-08-23
+    flags: [essential]
+    notes: Not in the main F-Droid repo. WireGuard run their own F-Droid-compatible repo at f-droid.wireguard.com if you would rather avoid Play.
+    install:
+      - {provider: play, id: com.wireguard.android}

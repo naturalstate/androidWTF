@@ -1,0 +1,34 @@
+profile: android-shizuku
+description: >
+  Stock plus Shizuku, paired over wireless debugging. ADB-level privileges with
+  no root, no PC on Android 11+, and nothing irreversible. If you do exactly one
+  thing past stock, do this.
+requires_tier: 1
+reversible: true
+
+modules:
+  - termux:  { shell: zsh, prompt: starship, font: nerd, storage: true }
+  - layout:  { home: ~/wtf, widgets: true }
+  - isolate: { work_profile: recommended }
+  - shizuku: { pair: wireless_debugging, remind_on_boot: true }
+
+# Shizuku's grant does not survive a reboot unless the device is rooted, so the
+# profile installs a reminder rather than pretending the pairing is permanent.
+
+bundles:
+  - core
+  - dev
+  - device
+  - network
+  - web
+  - mobile
+  - recon
+  - egress
+  - credaccess
+  - remote
+  - reporting
+  - hardware
+  - radio
+  - comms
+  - automation
+  - reference

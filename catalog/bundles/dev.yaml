@@ -1,0 +1,124 @@
+bundle: dev
+description: >
+  Editors, runtimes and the shell environment.
+tools:
+  - id: acode
+    name: Acode
+    desc: Capable code editor with plugin support and SFTP. The better default of the mobile editors.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:com.foxdebug.acode'
+    checked: 2026-08-23
+    license: freemium
+    install:
+      - {provider: obtainium, source: FDroid, id: com.foxdebug.acode}
+      - {provider: fdroid, id: com.foxdebug.acode}
+
+  - id: git
+    name: git
+    desc: 'Version control, and how most of the catalogue''s source actually arrives.'
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: pkg, id: git}
+
+  - id: github-app
+    name: GitHub
+    desc: Issues, PRs and code review from the phone.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.github.android'
+    checked: 2026-08-23
+    install:
+      - {provider: play, id: com.github.android}
+
+  - id: golang
+    name: Go
+    desc: Needed to build the ProjectDiscovery tooling from source when a package lags.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    install:
+      - {provider: pkg, id: golang}
+
+  - id: neovim
+    name: neovim
+    desc: The editor you already use, in Termux, with your existing config.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: pkg, id: neovim}
+
+  - id: nodejs
+    name: Node.js
+    desc: Runs Juice Shop and most of the JS-based tooling directly.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    install:
+      - {provider: pkg, id: nodejs}
+
+  - id: python
+    name: Python
+    desc: The runtime most of the tooling in here is written in.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: pkg, id: python}
+
+  - id: ripgrep
+    name: ripgrep / fd / jq
+    desc: The search and parse trio. You will use these more than anything else in here.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: pkg, id: ripgrep fd jq}
+
+  - id: spck
+    name: Spck Editor
+    desc: Git-aware editor with a built-in preview. Alternative to Acode.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:io.spck'
+    checked: 2026-08-23
+    license: freemium
+    install:
+      - {provider: play, id: io.spck}
+
+  - id: starship
+    name: Starship
+    desc: The prompt, shared with the other WTF builds so every shell looks the same.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    install:
+      - {provider: pkg, id: starship}
+
+  - id: tmux
+    name: tmux
+    desc: Sessions that survive Termux being backgrounded and killed. Not optional on a phone.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: pkg, id: tmux}

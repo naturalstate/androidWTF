@@ -1,0 +1,126 @@
+bundle: hardware
+description: >
+  NFC, RFID, BLE and USB OTG serial — the bench hardware interface.
+tools:
+  - id: chameleon-ultra-gui
+    name: Chameleon Ultra GUI
+    desc: Controls a Chameleon Ultra over BLE or USB. Slot management, card emulation, reads.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: GameTec-live/ChameleonUltraGUI
+    checked: 2026-08-23
+    flags: [exthw]
+    install:
+      - {provider: obtainium, source: GitHub, id: GameTec-live/ChameleonUltraGUI}
+      - {provider: github, id: GameTec-live/ChameleonUltraGUI}
+
+  - id: flipper
+    name: Flipper Mobile App
+    desc: Official companion for the Flipper Zero.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.flipperdevices.app'
+    checked: 2026-08-23
+    flags: [exthw]
+    install:
+      - {provider: play, id: com.flipperdevices.app}
+
+  - id: mifare-classic-tool
+    name: MIFARE Classic Tool
+    desc: Key dictionary attacks and sector dumping on MIFARE Classic. The core on-phone RFID tool.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:de.syss.MifareClassicTool'
+    checked: 2026-08-23
+    flags: [essential]
+    notes: Needs an NXP NFC controller. Many phones cannot read Classic at all.
+    install:
+      - {provider: obtainium, source: FDroid, id: de.syss.MifareClassicTool}
+      - {provider: fdroid, id: de.syss.MifareClassicTool}
+
+  - id: nfc-tools
+    name: NFC Tools
+    desc: Read, write and emulate NDEF tags. The PRO version adds tasks and scripting.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.wakdev.wdnfc'
+    checked: 2026-08-23
+    license: freemium
+    install:
+      - {provider: play, id: com.wakdev.wdnfc}
+
+  - id: nrf-connect
+    name: nRF Connect for Mobile
+    desc: 'The real BLE tool: scan, connect, enumerate services, read and write characteristics, log advertising. Not a generic ''BLE scanner''.'
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:no.nordicsemi.android.mcp'
+    checked: 2026-08-23
+    flags: [essential]
+    notes: Pairs directly with any Nordic nRF development board.
+    install:
+      - {provider: play, id: no.nordicsemi.android.mcp}
+
+  - id: nxp-taginfo
+    name: NXP TagInfo
+    desc: Deep tag identification — chip type, memory layout, capability container.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.nxp.taginfolite'
+    checked: 2026-08-23
+    install:
+      - {provider: play, id: com.nxp.taginfolite}
+
+  - id: serial-usb-terminal
+    name: Serial USB Terminal
+    desc: USB OTG serial console. This is how you talk to an ESP32, a Proxmark3, a Chameleon Ultra, or anything else with a UART.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:de.kai_morich.serial_usb_terminal'
+    checked: 2026-08-23
+    flags: [essential, exthw]
+    install:
+      - {provider: play, id: de.kai_morich.serial_usb_terminal}
+
+  - id: usb-device-info
+    name: USB Device Info
+    desc: Identify what is plugged into OTG and confirm the phone actually supports USB host mode.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:aws.apps.usbDeviceEnumerator'
+    checked: 2026-08-23
+    flags: [exthw]
+    notes: Run this first — plenty of phones do not do USB host at all.
+    install:
+      - {provider: play, id: aws.apps.usbDeviceEnumerator}
+
+  - id: bt-hci-snoop
+    name: Bluetooth HCI snoop log
+    desc: Not an app. Enable the toggle in Developer Options, reproduce the pairing, then pull btsnoop_hci.log and open it in Wireshark.
+    tier: 1
+    profiles: [shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    notes: adb bugreport, or adb pull /data/misc/bluetooth/logs/btsnoop_hci.log with Shizuku or root.
+    install:
+      - {provider: builtin, id: btsnoop}
+
+  - id: proxmark3
+    name: Proxmark3 client
+    desc: Compiles in Termux. The serial device permission is the hard part, not the build.
+    tier: 2
+    profiles: [rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    flags: [exthw]
+    notes: OTG serial access from Termux normally needs root or a udev-equivalent workaround.
+    install:
+      - {provider: pkg, id: proxmark3}

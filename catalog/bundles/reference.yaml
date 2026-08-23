@@ -1,0 +1,123 @@
+bundle: reference
+description: >
+  Offline methodology, standards and wordlists.
+tools:
+  - id: attack
+    name: 'MITRE ATT&CK for Mobile'
+    desc: Technique taxonomy, and the vocabulary clients expect findings mapped to.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    install:
+      - {provider: web, id: 'https://attack.mitre.org/matrices/mobile/'}
+
+  - id: gtfobins
+    name: GTFOBins / LOLBAS
+    desc: Living-off-the-land binaries for Unix and Windows.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    install:
+      - {provider: web, id: 'https://gtfobins.github.io'}
+
+  - id: hacktricks
+    name: HackTricks
+    desc: The single most useful practical reference. Mirror it offline — site work rarely has signal.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: web, id: 'https://book.hacktricks.wiki'}
+
+  - id: koreader
+    name: KOReader
+    desc: Document reader for the offline reference pack. Handles PDF, EPUB and HTML.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:org.koreader.launcher.fdroid'
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: FDroid, id: org.koreader.launcher.fdroid}
+      - {provider: fdroid, id: org.koreader.launcher.fdroid}
+
+  - id: librera
+    name: Librera Reader
+    desc: The alternative reader, better on large PDFs.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:com.foobnix.pro.pdf.reader'
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: FDroid, id: com.foobnix.pro.pdf.reader}
+      - {provider: fdroid, id: com.foobnix.pro.pdf.reader}
+
+  - id: nist-800-115
+    name: NIST SP 800-115
+    desc: Technical guide to information security testing. The methodology citation for a report.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    install:
+      - {provider: web, id: 'https://csrc.nist.gov/pubs/sp/800/115/final'}
+
+  - id: owasp-mastg
+    name: OWASP MASTG / MASVS
+    desc: The mobile testing standard. Directly relevant to everything in the Mobile App Assessment category.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: web, id: 'https://mas.owasp.org'}
+
+  - id: owasp-wstg
+    name: OWASP WSTG / ASVS
+    desc: The web testing standard, and the verification requirements to test against.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    install:
+      - {provider: web, id: 'https://owasp.org/www-project-web-security-testing-guide/'}
+
+  - id: payloads
+    name: PayloadsAllTheThings
+    desc: Payload and technique reference by injection class.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: web, id: 'https://github.com/swisskyrepo/PayloadsAllTheThings'}
+
+  - id: searchsploit
+    name: Exploit-DB / searchsploit
+    desc: Offline exploit database with local search.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'gitlab:exploit-database/exploitdb'
+    checked: 2026-08-23
+    install:
+      - {provider: git, id: 'https://gitlab.com/exploit-database/exploitdb'}
+
+  - id: seclists
+    name: SecLists
+    desc: Wordlists. Mirror them locally — you will not want to download these on a client site.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: danielmiessler/SecLists
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: git, id: 'https://github.com/danielmiessler/SecLists'}

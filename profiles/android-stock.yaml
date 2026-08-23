@@ -1,0 +1,33 @@
+profile: android-stock
+description: >
+  Everything that works on a completely untouched device. No bootloader unlock,
+  no root, no warranty voided, and Play Integrity stays intact. Roughly nine
+  tenths of the catalogue.
+requires_tier: 0
+reversible: true
+
+modules:
+  - termux:  { shell: zsh, prompt: starship, font: nerd, storage: true }
+  - layout:  { home: ~/wtf, widgets: true }
+  - isolate: { work_profile: recommended }
+
+# Isolation matters more than it looks. The catalogue will not trip Play
+# Integrity on its own, but a work profile you can freeze between engagements
+# keeps the pentest apps away from banking and payment apps regardless.
+
+bundles:
+  - core
+  - dev
+  - device
+  - network
+  - web
+  - recon
+  - egress
+  - credaccess
+  - remote
+  - reporting
+  - hardware
+  - radio
+  - comms
+  - automation
+  - reference

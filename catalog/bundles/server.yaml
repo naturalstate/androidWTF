@@ -1,0 +1,88 @@
+bundle: server
+description: >
+  Servers and listeners run from the phone. PAUSED — not in any profile yet.
+tools:
+  - id: caddy
+    name: Caddy
+    desc: A real web server with automatic HTTPS, from the phone.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    install:
+      - {provider: pkg, id: caddy}
+
+  - id: cowrie
+    name: Cowrie
+    desc: SSH and Telnet honeypot that records the whole session. Python, so it runs in Termux.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: cowrie/cowrie
+    checked: 2026-08-23
+    notes: Remap ports above 1024 at Tier 0, or bind the real ports at Tier 2.
+    install:
+      - {provider: git, id: 'https://github.com/cowrie/cowrie'}
+
+  - id: impacket
+    name: impacket
+    desc: The Windows protocol toolkit. Most of it works; anything binding 445 needs root.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    install:
+      - {provider: pip, id: impacket}
+
+  - id: metasploit
+    name: Metasploit Framework
+    desc: Installs and runs in Termux. Heavy, and listeners are limited to unprivileged ports without root.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: rapid7/metasploit-framework
+    checked: 2026-08-23
+    install:
+      - {provider: git, id: 'https://github.com/rapid7/metasploit-framework'}
+
+  - id: nginx
+    name: nginx
+    desc: The other real web server, when you want the config you already know.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    install:
+      - {provider: pkg, id: nginx}
+
+  - id: ntfy-server
+    name: ntfy
+    desc: Self-hosted push notifications. This is what a honeypot or a canary token fires into.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: heckel.io/ntfy/v2
+    checked: 2026-08-23
+    install:
+      - {provider: go, id: heckel.io/ntfy/v2}
+
+  - id: opencanary
+    name: OpenCanary
+    desc: Multi-protocol honeypot daemon. Pairs naturally with a canary token deployment.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    install:
+      - {provider: pip, id: opencanary}
+
+  - id: python-http
+    name: python -m http.server
+    desc: Payload hosting and exfil endpoint in one command. Works unprivileged as long as the port is above 1024.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: pkg, id: python}

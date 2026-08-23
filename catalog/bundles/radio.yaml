@@ -1,0 +1,152 @@
+bundle: radio
+description: >
+  Software defined radio, GNSS and LoRa.
+tools:
+  - id: aprsdroid
+    name: APRSdroid
+    desc: Amateur packet radio over APRS-IS or a real TNC.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: ge0rg/aprsdroid
+    checked: 2026-08-23
+    notes: Not in the main F-Droid repo — take it from GitHub Releases.
+    install:
+      - {provider: obtainium, source: GitHub, id: ge0rg/aprsdroid}
+      - {provider: github, id: ge0rg/aprsdroid}
+
+  - id: dump1090
+    name: dump1090
+    desc: ADS-B aircraft tracking off an RTL-SDR, from the Termux shell.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: flightaware/dump1090
+    checked: 2026-08-23
+    flags: [exthw]
+    install:
+      - {provider: git, id: 'https://github.com/flightaware/dump1090'}
+
+  - id: gpstest
+    name: GPSTest
+    desc: GNSS constellation view, accuracy, and which satellite systems the phone actually uses.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:com.android.gpstest.osmdroid'
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: FDroid, id: com.android.gpstest.osmdroid}
+      - {provider: fdroid, id: com.android.gpstest.osmdroid}
+
+  - id: look4sat
+    name: Look4Sat
+    desc: Open source satellite pass prediction and tracking.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:com.rtbishop.look4sat'
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: FDroid, id: com.rtbishop.look4sat}
+      - {provider: fdroid, id: com.rtbishop.look4sat}
+
+  - id: meshtastic
+    name: Meshtastic
+    desc: LoRa mesh networking. Talks to Heltec, T-Beam and RAK boards over BLE.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:com.geeksville.mesh'
+    checked: 2026-08-23
+    flags: [exthw]
+    install:
+      - {provider: obtainium, source: FDroid, id: com.geeksville.mesh}
+      - {provider: fdroid, id: com.geeksville.mesh}
+
+  - id: nmea-tools
+    name: NMEA Tools
+    desc: Read an external GPS dongle over OTG and feed it to the system location provider.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.peterhohsy.nmeatools'
+    checked: 2026-08-23
+    flags: [exthw]
+    license: freemium
+    install:
+      - {provider: play, id: com.peterhohsy.nmeatools}
+
+  - id: repeaterbook
+    name: RepeaterBook
+    desc: Amateur repeater directory with offline data.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.zbm2.repeaterbook'
+    checked: 2026-08-23
+    install:
+      - {provider: play, id: com.zbm2.repeaterbook}
+
+  - id: rf-analyzer
+    name: RF Analyzer
+    desc: Open source spectrum analyser supporting RTL-SDR and HackRF.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: demantz/RFAnalyzer
+    checked: 2026-08-23
+    flags: [exthw]
+    install:
+      - {provider: obtainium, source: GitHub, id: demantz/RFAnalyzer}
+      - {provider: github, id: demantz/RFAnalyzer}
+
+  - id: rtl-433
+    name: rtl_433
+    desc: Decodes the 433MHz sensor soup — weather stations, TPMS, doorbells, remotes.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: merbanan/rtl_433
+    checked: 2026-08-23
+    flags: [exthw]
+    install:
+      - {provider: git, id: 'https://github.com/merbanan/rtl_433'}
+
+  - id: rtl2832u-driver
+    name: RTL2832U driver
+    desc: 'Martin Marinov''s driver. A prerequisite for every RTL-SDR app on Android — install it before anything else in this category.'
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:marto.rtl_tcp_andro'
+    checked: 2026-08-23
+    flags: [essential, exthw]
+    install:
+      - {provider: play, id: marto.rtl_tcp_andro}
+
+  - id: sdr-touch
+    name: SDR Touch
+    desc: RTL-SDR receiver with a waterfall and demodulation. Free tier is time-limited.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:marto.androsdr2'
+    checked: 2026-08-23
+    flags: [exthw]
+    license: freemium
+    install:
+      - {provider: play, id: marto.androsdr2}
+
+  - id: sdrpp
+    name: SDR++
+    desc: Modern multi-SDR receiver, actively developed, supports most hardware.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: AlexandreRouma/SDRPlusPlus
+    checked: 2026-08-23
+    flags: [exthw]
+    install:
+      - {provider: obtainium, source: GitHub, id: AlexandreRouma/SDRPlusPlus}
+      - {provider: github, id: AlexandreRouma/SDRPlusPlus}

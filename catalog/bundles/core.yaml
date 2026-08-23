@@ -1,0 +1,165 @@
+bundle: core
+description: >
+  Termux itself, its add-on APKs, and the terminal essentials. Installed by
+  every profile.
+tools:
+  - id: connectbot
+    name: ConnectBot
+    desc: Lightweight open source SSH client. No account, no sync, no telemetry.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:org.connectbot'
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: FDroid, id: org.connectbot}
+      - {provider: fdroid, id: org.connectbot}
+
+  - id: hackers-keyboard
+    name: 'Hacker''s Keyboard'
+    desc: A keyboard with real Ctrl, Alt, Esc, Tab, arrows and function keys. Non-negotiable for terminal work.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:org.pocketworkstation.pckeyboard'
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: obtainium, source: FDroid, id: org.pocketworkstation.pckeyboard}
+      - {provider: fdroid, id: org.pocketworkstation.pckeyboard}
+
+  - id: nethunter
+    name: Kali NetHunter
+    desc: 'Kali''s Android platform. Rootless mode installs a full Kali chroot on a stock unrooted phone; full mode needs a NetHunter kernel.'
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    flags: [essential]
+    notes: Rootless works on any device. Monitor mode and HID attacks need Tier 3.
+    install:
+      - {provider: nethunter, id: com.offsec.nethunter}
+
+  - id: nethunter-store
+    name: NetHunter Store
+    desc: 'Offensive Security''s app repository. The supported source for the NetHunter apps.'
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    install:
+      - {provider: nethunter, id: com.offsec.nethunter.store}
+
+  - id: termius
+    name: Termius
+    desc: Polished SSH and SFTP client with cross-device sync. Free tier is usable; sync is paid.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.server.auditor.ssh.client'
+    checked: 2026-08-23
+    license: freemium
+    install:
+      - {provider: play, id: com.server.auditor.ssh.client}
+
+  - id: termux
+    name: Termux
+    desc: Terminal emulator and full Linux package environment. The backbone of the whole toolkit — everything in here that matters most is a Termux package, not an APK.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:com.termux'
+    checked: 2026-08-23
+    flags: [essential]
+    notes: F-Droid or GitHub only. The Play Store build is abandoned and its packages are years stale.
+    install:
+      - {provider: obtainium, source: FDroid, id: com.termux}
+      - {provider: fdroid, id: com.termux}
+
+  - id: termux-api
+    name: 'Termux:API'
+    desc: Bridges the shell to SMS, clipboard, sensors, camera, GPS, notifications and TTS. Every interesting automation script needs it.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:com.termux.api'
+    checked: 2026-08-23
+    flags: [essential]
+    notes: 'Also requires ''pkg install termux-api'' inside Termux.'
+    install:
+      - {provider: obtainium, source: FDroid, id: com.termux.api}
+      - {provider: fdroid, id: com.termux.api}
+
+  - id: termux-boot
+    name: 'Termux:Boot'
+    desc: Run scripts at device boot. Needed for anything that has to survive a reboot — listeners, honeypots, sync jobs.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:com.termux.boot'
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: FDroid, id: com.termux.boot}
+      - {provider: fdroid, id: com.termux.boot}
+
+  - id: termux-float
+    name: 'Termux:Float'
+    desc: A floating terminal window over other apps. Useful when you need a shell while driving a GUI tool.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:com.termux.window'
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: FDroid, id: com.termux.window}
+      - {provider: fdroid, id: com.termux.window}
+
+  - id: termux-styling
+    name: 'Termux:Styling'
+    desc: Fonts and colour schemes for Termux. Where the androidWTF theme gets applied.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:com.termux.styling'
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: FDroid, id: com.termux.styling}
+      - {provider: fdroid, id: com.termux.styling}
+
+  - id: termux-tasker
+    name: 'Termux:Tasker'
+    desc: Exposes Termux scripts as Tasker actions. Combined with Tasker this is the automation backbone.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:com.termux.tasker'
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: FDroid, id: com.termux.tasker}
+      - {provider: fdroid, id: com.termux.tasker}
+
+  - id: termux-widget
+    name: 'Termux:Widget'
+    desc: Home screen shortcuts that launch a script with one tap. This is how field workflows get usable.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:com.termux.widget'
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: obtainium, source: FDroid, id: com.termux.widget}
+      - {provider: fdroid, id: com.termux.widget}
+
+  - id: termux-x11
+    name: 'Termux:X11'
+    desc: X11 display server for Termux, for running GUI Linux applications.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: termux/termux-x11
+    checked: 2026-08-23
+    notes: Pairs with the Linux Desktop module.
+    install:
+      - {provider: obtainium, source: GitHub, id: termux/termux-x11}
+      - {provider: github, id: termux/termux-x11}

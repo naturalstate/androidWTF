@@ -1,0 +1,48 @@
+bundle: socialeng
+description: >
+  Social engineering support. Read the legal notes before using any of it.
+tools:
+  - id: hacker-tracker
+    name: Hacker Tracker
+    desc: DEF CON conference companion. Not a tool, but it is always on the phone anyway.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.shortstack.hackertracker'
+    checked: 2026-08-23
+    install:
+      - {provider: play, id: com.shortstack.hackertracker}
+
+  - id: pentest-reference
+    name: Pentest Reference
+    desc: Offline command and methodology reference. First-party androidWTF tooling.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    install:
+      - {provider: androidwtf, id: pentest-reference}
+
+  - id: spoofcard
+    name: SpoofCard
+    desc: Caller ID spoofing. The US Truth in Caller ID Act makes spoofing with intent to defraud or harm illegal, and the TRACED Act raised the penalties.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.spoofcard.app'
+    checked: 2026-08-23
+    flags: [legal]
+    license: paid
+    notes: Requires written client authorisation naming caller ID spoofing as an in-scope technique. Most consumer spoofing services have also shut down or restricted signups.
+    install:
+      - {provider: play, id: com.spoofcard.app}
+
+  - id: trust-me-bro
+    name: Trust Me Bro
+    desc: Pretext soundboard. First-party androidWTF tooling.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    install:
+      - {provider: androidwtf, id: trust-me-bro}

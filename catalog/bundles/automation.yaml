@@ -1,0 +1,53 @@
+bundle: automation
+description: >
+  Trigger-based field workflows, usually driving Termux scripts.
+tools:
+  - id: automate
+    name: Automate
+    desc: Flowchart-based automation. The third option, and the most visual.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.llamalab.automate'
+    checked: 2026-08-23
+    license: freemium
+    install:
+      - {provider: play, id: com.llamalab.automate}
+
+  - id: home-assistant
+    name: Home Assistant
+    desc: Companion app, and a surprisingly good generic sensor and webhook source for automations.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:io.homeassistant.companion.android.minimal'
+    checked: 2026-08-23
+    notes: 'The F-Droid build is the ''minimal'' flavour, which drops the Play Services dependencies.'
+    install:
+      - {provider: obtainium, source: FDroid, id: io.homeassistant.companion.android.minimal}
+      - {provider: fdroid, id: io.homeassistant.companion.android.minimal}
+
+  - id: macrodroid
+    name: MacroDroid
+    desc: Friendlier automation with a gentler learning curve. Less powerful than Tasker.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.arlosoft.macrodroid'
+    checked: 2026-08-23
+    license: freemium
+    install:
+      - {provider: play, id: com.arlosoft.macrodroid}
+
+  - id: tasker
+    name: Tasker
+    desc: 'Combined with Termux:Tasker this is how field workflows get built — trigger a script on arriving at a location, on a WiFi join, on a notification.'
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:net.dinglisch.android.taskerm'
+    checked: 2026-08-23
+    flags: [essential]
+    license: paid
+    install:
+      - {provider: play, id: net.dinglisch.android.taskerm}

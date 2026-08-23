@@ -1,0 +1,99 @@
+bundle: reporting
+description: >
+  Evidence capture, notes and the reporting pipeline.
+tools:
+  - id: exiftool
+    name: exiftool
+    desc: Read, strip and verify metadata before anything goes into a report.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    install:
+      - {provider: pkg, id: exiftool}
+
+  - id: joplin
+    name: Joplin
+    desc: Open source notes with self-hostable sync. The alternative if you want the whole stack open.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:net.cozic.joplin'
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: FDroid, id: net.cozic.joplin}
+      - {provider: fdroid, id: net.cozic.joplin}
+
+  - id: markor
+    name: Markor
+    desc: Lightweight markdown editor over local files. No database, no sync, no lock-in.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:net.gsantner.markor'
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: FDroid, id: net.gsantner.markor}
+      - {provider: fdroid, id: net.gsantner.markor}
+
+  - id: nextcloud
+    name: Nextcloud
+    desc: Self-hosted artifact storage, if you would rather have a server than peer sync.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:com.nextcloud.client'
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: FDroid, id: com.nextcloud.client}
+      - {provider: fdroid, id: com.nextcloud.client}
+
+  - id: obsidian
+    name: Obsidian
+    desc: Markdown notes over a plain folder. Combined with Syncthing this is a complete engagement notes pipeline with no vendor in it.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:md.obsidian'
+    checked: 2026-08-23
+    flags: [essential]
+    license: freemium
+    install:
+      - {provider: play, id: md.obsidian}
+
+  - id: open-camera
+    name: Open Camera
+    desc: Manual camera with GPS stamping and EXIF control. For physical engagement evidence that has to hold up later.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:net.sourceforge.opencamera'
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: obtainium, source: FDroid, id: net.sourceforge.opencamera}
+      - {provider: fdroid, id: net.sourceforge.opencamera}
+
+  - id: screen-recorder
+    name: ADV Screen Recorder
+    desc: Screen capture of exploitation steps, for the report and for proving it worked.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.blogspot.byterevapps.lollipopscreenrecorder'
+    checked: 2026-08-23
+    license: freemium
+    install:
+      - {provider: play, id: com.blogspot.byterevapps.lollipopscreenrecorder}
+
+  - id: timestamp-camera
+    name: Timestamp Camera
+    desc: Burns date, time and coordinates into the image itself rather than only the metadata.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.jeyluta.timestampcamerafree'
+    checked: 2026-08-23
+    license: freemium
+    install:
+      - {provider: play, id: com.jeyluta.timestampcamerafree}

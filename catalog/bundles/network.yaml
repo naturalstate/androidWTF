@@ -1,0 +1,218 @@
+bundle: network
+description: >
+  Capture, scan, map and intercept the network the device is on.
+tools:
+  - id: cellmapper
+    name: CellMapper
+    desc: Crowd-sourced cell site mapping and coverage data.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:cellmapper.net.cellmapper'
+    checked: 2026-08-23
+    install:
+      - {provider: play, id: cellmapper.net.cellmapper}
+
+  - id: fing
+    name: Fing
+    desc: Fast network discovery with good device fingerprinting. Heavy upsell, but the free tier does the job.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.overlook.android.fing'
+    checked: 2026-08-23
+    license: freemium
+    install:
+      - {provider: play, id: com.overlook.android.fing}
+
+  - id: http-toolkit
+    name: HTTP Toolkit
+    desc: Alternative intercepting proxy with strong ADB integration and one-click certificate setup.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: httptoolkit/httptoolkit-android
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: GitHub, id: httptoolkit/httptoolkit-android}
+      - {provider: github, id: httptoolkit/httptoolkit-android}
+
+  - id: netcat
+    name: netcat / socat
+    desc: The two tools you actually reach for. Listeners, relays, port forwards.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    notes: Ports below 1024 need root.
+    install:
+      - {provider: pkg, id: netcat-openbsd socat}
+
+  - id: network-cell-info
+    name: Network Cell Info Lite
+    desc: Cell tower mapping, band and signal detail, neighbouring cells.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.wilysis.cellinfolite'
+    checked: 2026-08-23
+    license: freemium
+    install:
+      - {provider: play, id: com.wilysis.cellinfolite}
+
+  - id: network-survey
+    name: Network Survey
+    desc: Cellular, WiFi, GNSS and Bluetooth survey with logging to file. Underrated for site surveys and RF mapping.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:com.craxiom.networksurvey'
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: FDroid, id: com.craxiom.networksurvey}
+      - {provider: fdroid, id: com.craxiom.networksurvey}
+
+  - id: nmap
+    name: nmap
+    desc: The scanner. Connect scan works unprivileged; SYN scan, OS detection and anything raw-socket needs root.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    flags: [essential]
+    notes: nmap -sT works at Tier 0. nmap -sS needs Tier 2.
+    install:
+      - {provider: pkg, id: nmap}
+
+  - id: pcapdroid
+    name: PCAPdroid
+    desc: Packet capture with no root, by running a local VPN service. Exports real PCAP for Wireshark. With root it captures the full interface instead of just app traffic.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: emanuele-f/PCAPdroid
+    checked: 2026-08-23
+    flags: [essential]
+    notes: Tier 0 gives you app traffic only. Tier 2 gives you the whole interface.
+    install:
+      - {provider: obtainium, source: GitHub, id: emanuele-f/PCAPdroid}
+      - {provider: github, id: emanuele-f/PCAPdroid}
+
+  - id: port-authority
+    name: Port Authority
+    desc: Open source LAN scanner and port scanner.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:com.aaronjwood.portauthority'
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: FDroid, id: com.aaronjwood.portauthority}
+      - {provider: fdroid, id: com.aaronjwood.portauthority}
+
+  - id: portdroid
+    name: PortDroid
+    desc: Port scanner, host discovery, DNS lookup, whois and traceroute in one app.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.stealthcopter.portdroid'
+    checked: 2026-08-23
+    license: freemium
+    install:
+      - {provider: play, id: com.stealthcopter.portdroid}
+
+  - id: reqable
+    name: Reqable
+    desc: Modern on-device intercepting HTTP(S) proxy, the successor to HttpCanary. Inspect, rewrite and replay requests without a laptop.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.reqable.android'
+    checked: 2026-08-23
+    flags: [essential]
+    license: freemium
+    install:
+      - {provider: play, id: com.reqable.android}
+
+  - id: wifianalyzer
+    name: WiFiAnalyzer
+    desc: Channel and signal analysis. Open source, no ads, no telemetry — prefer it over the closed alternatives.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:com.vrem.wifianalyzer'
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: FDroid, id: com.vrem.wifianalyzer}
+      - {provider: fdroid, id: com.vrem.wifianalyzer}
+
+  - id: wifiman
+    name: WiFiman
+    desc: 'Ubiquiti''s analyser. Clean, fast, with a good speed test and device discovery.'
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.ubnt.usurvey'
+    checked: 2026-08-23
+    install:
+      - {provider: play, id: com.ubnt.usurvey}
+
+  - id: bettercap
+    name: bettercap
+    desc: Network attack and MITM framework. Needs raw sockets for anything beyond passive use.
+    tier: 2
+    profiles: [rooted, nethunter]
+    status: maintained
+    upstream: github.com/bettercap/bettercap
+    checked: 2026-08-23
+    install:
+      - {provider: go, id: github.com/bettercap/bettercap}
+
+  - id: masscan
+    name: masscan
+    desc: Mass port scanner. Raw sockets only, so it is root-or-nothing.
+    tier: 2
+    profiles: [rooted, nethunter]
+    status: maintained
+    upstream: robertdavidgraham/masscan
+    checked: 2026-08-23
+    notes: Build from source; there is no Termux package.
+    install:
+      - {provider: git, id: 'https://github.com/robertdavidgraham/masscan'}
+
+  - id: responder
+    name: Responder
+    desc: LLMNR, NBT-NS and MDNS poisoner.
+    tier: 2
+    profiles: [rooted, nethunter]
+    status: maintained
+    upstream: lgandx/Responder
+    checked: 2026-08-23
+    notes: Binds privileged ports, so root is mandatory.
+    install:
+      - {provider: git, id: 'https://github.com/lgandx/Responder'}
+
+  - id: snoopsnitch
+    name: SnoopSnitch
+    desc: 'IMSI catcher and SS7 attack detection from the baseband''s own diagnostic messages.'
+    tier: 2
+    profiles: [rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:de.srlabs.snoopsnitch'
+    checked: 2026-08-23
+    notes: Needs root and a Qualcomm chipset. Will not work on Exynos or Tensor.
+    install:
+      - {provider: obtainium, source: FDroid, id: de.srlabs.snoopsnitch}
+      - {provider: fdroid, id: de.srlabs.snoopsnitch}
+
+  - id: tcpdump
+    name: tcpdump
+    desc: Interface capture from the shell. Needs raw socket access.
+    tier: 2
+    profiles: [rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    notes: At Tier 0 use PCAPdroid instead.
+    install:
+      - {provider: pkg, id: tcpdump, repo: root}

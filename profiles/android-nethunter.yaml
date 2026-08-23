@@ -1,0 +1,40 @@
+profile: android-nethunter
+description: >
+  A supported device running a NetHunter kernel. Monitor mode, packet injection,
+  HID attacks and external adapter drivers. The tier that can brick a phone.
+requires_tier: 3
+reversible: false
+breaks_play_integrity: true
+requires_supported_device: true
+
+modules:
+  - termux:    { shell: zsh, prompt: starship, font: nerd, storage: true }
+  - layout:    { home: ~/wtf, widgets: true }
+  - isolate:   { work_profile: strongly_recommended }
+  - shizuku:   { pair: root, remind_on_boot: false }
+  - repos:     { root_repo: true, tur_repo: true }
+  - nethunter: { chroot: full, kex: true }
+
+# Check the NetHunter supported-device list before flashing anything. Internal
+# Android WiFi chipsets do not do monitor mode even with the kernel, so in
+# practice this profile assumes an external adapter over OTG.
+
+bundles:
+  - core
+  - dev
+  - device
+  - network
+  - wireless
+  - web
+  - mobile
+  - recon
+  - egress
+  - credaccess
+  - remote
+  - reporting
+  - hardware
+  - radio
+  - desktop
+  - comms
+  - automation
+  - reference

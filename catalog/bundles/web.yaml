@@ -1,0 +1,139 @@
+bundle: web
+description: >
+  Web and API testing, including the on-device intercepting proxies.
+tools:
+  - id: feroxbuster
+    name: feroxbuster
+    desc: Recursive content discovery in Rust.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    install:
+      - {provider: pkg, id: feroxbuster}
+
+  - id: ffuf
+    name: ffuf
+    desc: Content and parameter fuzzing. Runs at full speed in Termux.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: github.com/ffuf/ffuf/v2
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: go, id: github.com/ffuf/ffuf/v2}
+
+  - id: firefox-nightly
+    name: Firefox Nightly
+    desc: The only mainstream mobile browser that runs real desktop extensions. Wappalyzer, Cookie Editor, FoxyProxy and friends all work.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:org.mozilla.fenix'
+    checked: 2026-08-23
+    flags: [essential]
+    notes: Custom add-on collections need a one-time setup in the debug menu.
+    install:
+      - {provider: play, id: org.mozilla.fenix}
+
+  - id: hermit
+    name: Hermit
+    desc: Wraps any web app as a standalone lite app. Good for PortSwigger Academy, your own dashboards, or anything you want off the browser tab pile.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:com.chimbori.hermitcrab'
+    checked: 2026-08-23
+    license: freemium
+    install:
+      - {provider: play, id: com.chimbori.hermitcrab}
+
+  - id: httpx-tool
+    name: httpx
+    desc: Fast HTTP probing and fingerprinting across a host list.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: github.com/projectdiscovery/httpx/cmd/httpx
+    checked: 2026-08-23
+    install:
+      - {provider: go, id: github.com/projectdiscovery/httpx/cmd/httpx}
+
+  - id: kiwi-browser
+    name: Kiwi Browser
+    desc: Chromium with Chrome Web Store extension support. Development has been intermittent — treat Firefox Nightly as the primary.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: kiwibrowser/src.next
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: GitHub, id: kiwibrowser/src.next}
+      - {provider: github, id: kiwibrowser/src.next}
+
+  - id: mitmproxy
+    name: mitmproxy
+    desc: 'Scriptable intercepting proxy from the shell, for when Reqable''s UI is not enough.'
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    install:
+      - {provider: pip, id: mitmproxy}
+
+  - id: nikto
+    name: nikto
+    desc: Old, noisy, still finds things.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: sullo/nikto
+    checked: 2026-08-23
+    install:
+      - {provider: git, id: 'https://github.com/sullo/nikto'}
+
+  - id: nuclei
+    name: nuclei
+    desc: Template-driven vulnerability scanning. Works well on a phone.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: github.com/projectdiscovery/nuclei/v3/cmd/nuclei
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: go, id: github.com/projectdiscovery/nuclei/v3/cmd/nuclei}
+
+  - id: sqlmap
+    name: sqlmap
+    desc: SQL injection automation. Slow on a phone but entirely functional.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    install:
+      - {provider: pip, id: sqlmap}
+
+  - id: urlcheck
+    name: URLCheck
+    desc: Inspect, unshorten and strip tracking from a URL before it opens. Set it as the default handler.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:com.trianguloy.urlchecker'
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: FDroid, id: com.trianguloy.urlchecker}
+      - {provider: fdroid, id: com.trianguloy.urlchecker}
+
+  - id: burp-ca
+    name: Burp / system CA install
+    desc: Not an app. On Android 7+ user-added CAs are not trusted by apps, so an intercepting proxy sees nothing until the certificate lands in the system store.
+    tier: 2
+    profiles: [rooted, nethunter]
+    status: maintained
+    checked: 2026-08-23
+    notes: Magisk modules like AlwaysTrustUserCerts handle this. At Tier 0 you are limited to apps that opt into user CAs.
+    install:
+      - {provider: builtin, id: system-ca}

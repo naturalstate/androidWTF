@@ -1,0 +1,78 @@
+bundle: comms
+description: >
+  Engagement communications, including self-hostable and offline-capable
+  options.
+tools:
+  - id: briar
+    name: Briar
+    desc: Peer-to-peer messaging over Tor, WiFi or Bluetooth, with no server at all. Works when the network does not.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:org.briarproject.briar.android'
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: FDroid, id: org.briarproject.briar.android}
+      - {provider: fdroid, id: org.briarproject.briar.android}
+
+  - id: element
+    name: Element
+    desc: Matrix client. Self-hostable, so team comms during an engagement can stay on infrastructure you control.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:im.vector.app'
+    checked: 2026-08-23
+    install:
+      - {provider: obtainium, source: FDroid, id: im.vector.app}
+      - {provider: fdroid, id: im.vector.app}
+
+  - id: ntfy
+    name: ntfy
+    desc: Open source push notifications, self-hostable. Where honeypot and canary alerts land.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'f-droid:io.heckel.ntfy'
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: obtainium, source: FDroid, id: io.heckel.ntfy}
+      - {provider: fdroid, id: io.heckel.ntfy}
+
+  - id: pushover
+    name: Pushover
+    desc: Commercial push notifications. Simpler than ntfy if you do not want to host anything.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:net.superblock.pushover'
+    checked: 2026-08-23
+    license: paid
+    install:
+      - {provider: play, id: net.superblock.pushover}
+
+  - id: signal
+    name: Signal
+    desc: Default for engagement comms. The GitHub build avoids Play Services where you would rather not have it.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: signalapp/Signal-Android
+    checked: 2026-08-23
+    flags: [essential]
+    install:
+      - {provider: obtainium, source: GitHub, id: signalapp/Signal-Android}
+      - {provider: github, id: signalapp/Signal-Android}
+
+  - id: telegram
+    name: Telegram
+    desc: Client-driven. Keep it if your clients use it.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: 'play:org.telegram.messenger'
+    checked: 2026-08-23
+    notes: Not in the main F-Droid repo.
+    install:
+      - {provider: play, id: org.telegram.messenger}
