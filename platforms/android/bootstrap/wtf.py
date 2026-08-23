@@ -202,6 +202,22 @@ def load_yaml(path):
 
 # -------------------------------------------------------------------- probe
 
+def repo_health():
+    """Termux's own package repo state, via preflight. Returns 'ok'|'stale'|
+    'custom'|'unknown'. A stale bootstrap fails every pkg step, so it is worth
+    knowing before running twenty of them."""
+    pre = HERE / "preflight.sh"
+    if not pre.exists():
+        return "unknown"
+    try:
+        out = subprocess.run(["bash", "-c", f'source "{pre}"; probe; echo "$WTF_REPO"'],
+                             capture_output=True, text=True, timeout=30)
+        v = out.stdout.strip().splitlines()[-1] if out.stdout.strip() else ""
+        return v or "unknown"
+    except Exception:                                       # noqa: BLE001
+        return "unknown"
+
+
 def device_tier():
     """Ask preflight.sh for the tier. Returns (tier, source)."""
     pre = HERE / "preflight.sh"
@@ -365,6 +381,14 @@ def cmd_install(args):
         print()
         dim("--dry-run: nothing was executed.")
         return
+
+    # Every pkg step, and therefore the pip and go toolchain steps behind them,
+    # depends on a working repo. Failing twenty times in a row teaches nothing.
+    if any(k == "pkg" for k, _, _ in plan) and repo_health() in ("stale", "unknown"):
+        print()
+        warn("Termux's package repository is not usable, so every step here would fail.")
+        dim("Run 'wtf doctor' for the fix. Re-run this once pkg update works.")
+        sys.exit(1)
 
     print()
     warn("Running the shell steps now. Ctrl-C to stop.")

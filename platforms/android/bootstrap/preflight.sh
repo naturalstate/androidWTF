@@ -109,6 +109,27 @@ probe() {
 		WTF_NETHUNTER=app
 	fi
 
+	# Termux's own health. A stale bootstrap is the single most common reason
+	# `pkg install` fails, and apt reports it as "Metadata integrity can't be
+	# verified / repository is disabled", which points at nothing useful.
+	WTF_TERMUX_VER="${TERMUX_VERSION:-}"
+	WTF_SOURCES=""
+	WTF_REPO=ok
+	if [ -n "${PREFIX:-}" ] && [ -r "$PREFIX/etc/apt/sources.list" ]; then
+		WTF_SOURCES="$(grep -hoE 'https?://[^ ]+' "$PREFIX/etc/apt/sources.list" \
+			"$PREFIX/etc/apt/sources.list.d/"* 2>/dev/null | sed 's#\(https\?://[^/]*\).*#\1#' | sort -u | tr '\n' ' ')"
+		case "$WTF_SOURCES" in
+			"")                       WTF_REPO=unknown ;;
+			*packages.termux.dev*)    WTF_REPO=ok ;;
+			*grimler.se*)             WTF_REPO=ok ;;
+			*packages.termux.org*)    WTF_REPO=stale ;;
+			*termux.net*)             WTF_REPO=stale ;;
+			*)                        WTF_REPO=custom ;;
+		esac
+	else
+		WTF_REPO=unknown
+	fi
+
 	has_feature android.hardware.usb.host; WTF_USBHOST=$?
 	has_feature android.hardware.nfc;      WTF_NFC=$?
 	has_feature android.hardware.bluetooth_le; WTF_BLE=$?
@@ -157,6 +178,15 @@ report() {
 	row "usb otg" "$(yesno $WTF_USBHOST)"
 	row "nfc"     "$(yesno $WTF_NFC)"
 	row "ble"     "$(yesno $WTF_BLE)"
+	say ""
+	step "TERMUX"
+	row "version" "${WTF_TERMUX_VER:-${DIM}unknown${RESET}}"
+	case "$WTF_REPO" in
+		ok)      row "repo" "${GREEN}reachable${RESET}" ;;
+		stale)   row "repo" "${RED}stale mirror${RESET}" ;;
+		custom)  row "repo" "${YELLOW}custom${RESET}" ;;
+		unknown) row "repo" "${DIM}unreadable${RESET}" ;;
+	esac
 	# Built as a variable rather than inline: a `case` inside $( ) has its
 	# pattern `)` read as the end of the substitution.
 	local blurb
@@ -176,6 +206,17 @@ report() {
 
 advise() {
 	local n=0
+	if [ "$WTF_REPO" = stale ] || [ "$WTF_REPO" = unknown ]; then
+		n=1; say ""
+		warn "Termux's package repository is stale. Nothing will install."
+		wrap "The old packages.termux.org host now redirects, and apt refuses the redirect rather than following it, so it reports 'Metadata integrity can't be verified. Repository is disabled now.'"
+		say ""
+		dim  "  Try first:   termux-change-repo"
+		dim  "  If that fails, the Termux app itself is too old to fix from"
+		dim  "  inside. Uninstall it and install the current build from"
+		dim  "  F-Droid or GitHub Releases, then re-run the bootstrap."
+		wrap "The Play Store build was abandoned in 2020 and its repositories are dead; it cannot be repaired."
+	fi
 	[ "$WTF_SHIZUKU" = no ] && [ "$WTF_TIER" = 0 ] && [ -n "$WTF_SDK" ] && {
 		n=1; say ""
 		wrap "Shizuku would move this device to Tier 1 for free. Pairing over wireless debugging is reversible and voids nothing."
