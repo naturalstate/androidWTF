@@ -85,11 +85,13 @@ probe() {
 	has_feature android.hardware.nfc;      WTF_NFC=$?
 	has_feature android.hardware.bluetooth_le; WTF_BLE=$?
 
-	# Tier is the highest rung the device actually reaches.
-	if [ "$WTF_NETHUNTER" = kernel ]; then WTF_TIER=3
-	elif [ "$WTF_ROOT" = yes ];        then WTF_TIER=2
+	# Tier is the highest rung the device actually reaches. With no SDK we could
+	# not read the device at all, so the honest answer is "unknown", not 0.
+	if   [ -z "$WTF_SDK" ];              then WTF_TIER=""
+	elif [ "$WTF_NETHUNTER" = kernel ];  then WTF_TIER=3
+	elif [ "$WTF_ROOT" = yes ];          then WTF_TIER=2
 	elif [ "$WTF_SHIZUKU" = installed ]; then WTF_TIER=1
-	else                                    WTF_TIER=0
+	else                                      WTF_TIER=0
 	fi
 }
 
@@ -105,6 +107,7 @@ report() {
 	local tcol
 	case "$WTF_TIER" in
 		0) tcol="$GREEN" ;; 1) tcol="$CYAN" ;; 2) tcol="$YELLOW" ;; 3) tcol="$RED" ;;
+		*) tcol="$YELLOW" ;;
 	esac
 
 	step "Device"
@@ -125,18 +128,19 @@ report() {
 	# pattern `)` read as the end of the substitution.
 	local blurb
 	case "$WTF_TIER" in
+		"") blurb='unknown — could not read this device.' ;;
 		0) blurb='stock. No root, nothing voided.' ;;
 		1) blurb='Shizuku present. ADB-level privileges without root.' ;;
 		2) blurb='rooted. Raw sockets, privileged ports, Frida.' ;;
 		3) blurb='NetHunter kernel. Monitor mode and injection.' ;;
 	esac
 	say ""
-	printf '%s==>%s Tier %s%s%s — %s\n' "$BOLD" "$RESET" "$tcol" "$WTF_TIER" "$RESET" "$blurb"
+	printf '%s==>%s Tier %s%s%s — %s\n' "$BOLD" "$RESET" "$tcol" "${WTF_TIER:-?}" "$RESET" "$blurb"
 }
 
 advise() {
 	local n=0
-	[ "$WTF_SHIZUKU" = no ] && [ "$WTF_TIER" = 0 ] && {
+	[ "$WTF_SHIZUKU" = no ] && [ "$WTF_TIER" = 0 ] && [ -n "$WTF_SDK" ] && {
 		n=1; say ""; dim "Shizuku would move this device to Tier 1 for free — pairing over wireless"
 		dim "debugging is reversible and voids nothing.  wtf catalogue --bundle device"
 	}
