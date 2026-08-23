@@ -15,6 +15,7 @@ guessing.
 import os
 import re
 import shutil
+import textwrap
 import subprocess
 import sys
 from pathlib import Path
@@ -25,17 +26,39 @@ BUNDLES = ROOT / "catalog" / "bundles"
 PROFILES = ROOT / "profiles"
 VERSION = "0.1.0-dev"
 
-BOLD, DIM, GREEN, YELLOW, RED, CYAN, RESET = (
-    "\033[1m", "\033[2m", "\033[32m", "\033[33m", "\033[31m", "\033[36m", "\033[0m")
+# Phone terminals are narrow — 40 to 55 columns is normal, against the 80 a
+# desktop layout assumes — and SGR 2 (faint) renders as barely-visible grey on
+# most of them. So: no faint, and every layout is computed from the real width.
+BOLD, GREY, GREEN, YELLOW, RED, CYAN, RESET = (
+    "\033[1m", "\033[90m", "\033[32m", "\033[33m", "\033[31m", "\033[36m", "\033[0m")
 if not sys.stdout.isatty() or os.environ.get("NO_COLOR"):
-    BOLD = DIM = GREEN = YELLOW = RED = CYAN = RESET = ""
+    BOLD = GREY = GREEN = YELLOW = RED = CYAN = RESET = ""
+
+DIM = GREY  # kept as an alias so existing call sites stay readable
+
+def width():
+    try:
+        return max(32, min(100, shutil.get_terminal_size(fallback=(50, 24)).columns))
+    except Exception:                                       # noqa: BLE001
+        return 50
 
 TIER_COLOUR = {0: GREEN, 1: CYAN, 2: YELLOW, 3: RED}
 
 
-def step(msg): print(f"{BOLD}==>{RESET} {msg}")
+def step(msg): print(f"{BOLD}{msg}{RESET}")
 def warn(msg): print(f"{YELLOW}{msg}{RESET}")
-def dim(msg):  print(f"{DIM}{msg}{RESET}")
+def dim(msg):  print(f"{GREY}{msg}{RESET}")
+def rule(w=None): print(f"{GREY}{'─' * (w or width())}{RESET}")
+
+
+def para(text, indent=0, colour=GREY):
+    """Wrap a paragraph to the terminal, so descriptions stop wrapping raggedly."""
+    for line in textwrap.wrap(text, max(20, width() - indent)) or [""]:
+        print(f"{' ' * indent}{colour}{line}{RESET}")
+
+
+def ellipsis(s, n):
+    return s if len(s) <= n else s[: max(1, n - 1)] + "\u2026"
 
 
 # ------------------------------------------------------------------ yaml-lite
@@ -241,34 +264,56 @@ def cmd_list(args):
     limit = tier if tier is not None else profile["requires_tier"]
     picked, skipped = resolve(profile, bundles, limit)
 
-    step(f"{profile['profile']} — {len(picked)} tools at Tier {limit}")
-    dim(profile["description"])
+    W = width()
+    step(f"{profile['profile']}")
+    print(f"{GREY}{len(picked)} tools · Tier {limit}{RESET}")
     print()
+    para(profile["description"])
+    print()
+
+    # Name column is whatever is left after the tier badge and the provider.
+    pw = min(max((len(t["install"][0]["provider"]) for _, t in picked), default=8), 10)
+    nw = max(12, W - 8 - pw - 2)
+    any_essential = any("essential" in (t.get("flags") or []) for _, t in picked)
+
     cur = None
     for b, t in picked:
         if b != cur:
+            if cur is not None:
+                print()
             cur = b
             print(f"  {BOLD}{b}{RESET}")
         c = TIER_COLOUR[t["tier"]]
-        flags = t.get("flags") or []
-        mark = f" {DIM}({', '.join(flags)}){RESET}" if flags else ""
-        print(f"    {c}T{t['tier']}{RESET} {t['name']:<28} {DIM}{t['install'][0]['provider']}{RESET}{mark}")
+        star = f"{GREEN}*{RESET}" if "essential" in (t.get("flags") or []) else " "
+        name = ellipsis(t["name"], nw)
+        prov = ellipsis(t["install"][0]["provider"], pw)
+        print(f"  {c}T{t['tier']}{RESET} {star}{name:<{nw}} {GREY}{prov}{RESET}")
+    if any_essential:
+        print()
+        print(f"  {GREEN}*{RESET} {GREY}essential{RESET}")
     if skipped:
         print()
-        dim(f"{len(skipped)} tools need a higher tier than this device reports and were left out.")
+        para(f"{len(skipped)} tools need a higher tier than this device reports "
+             f"and were left out.", colour=YELLOW)
 
 
 def cmd_catalogue(args):
     bundles = load_bundles()
     only = opt(args, "--bundle")
+    W = width()
     for name, b in bundles.items():
         if only and name != only:
             continue
-        step(f"{name} — {len(b['tools'])} tools")
-        dim(b["description"])
+        rule(W)
+        step(f"{name}")
+        print(f"{GREY}{len(b['tools'])} tools{RESET}")
+        print()
+        para(b["description"])
+        print()
         for t in b["tools"]:
             c = TIER_COLOUR[t["tier"]]
-            print(f"    {c}T{t['tier']}{RESET} {t['id']:<26} {t['desc'][:64]}")
+            print(f"  {c}T{t['tier']}{RESET} {BOLD}{t['id']}{RESET}")
+            para(t["desc"], indent=5)
         print()
 
 
@@ -291,12 +336,19 @@ def cmd_install(args):
     picked, skipped = resolve(profile, bundles, tier)
     plan = build_plan(picked)
 
-    step(f"{profile['profile']} at Tier {tier} — {len(picked)} tools, {len(plan)} steps")
+    W = width()
+    step(f"{profile['profile']}")
+    print(f"{GREY}Tier {tier} · {len(picked)} tools · {len(plan)} steps{RESET}")
     print()
-    for kind, cmd, who in plan:
-        print(f"  {DIM}{kind:<10}{RESET} {cmd}")
-        if who:
-            dim(f"             {who}")
+    for n, (kind, cmd, who) in enumerate(plan, 1):
+        label = f"{CYAN}{kind}{RESET}"
+        note = f"  {GREY}{who}{RESET}" if who else ""
+        print(f"  {GREY}{n:>2}{RESET} {label}{note}")
+        # Printed raw, never textwrap'd. The terminal soft-wraps long commands
+        # without inserting newlines, so they stay copy-pasteable; textwrap would
+        # break a URL across two real lines and silently corrupt it.
+        print(f"     {cmd}")
+        print()
     if skipped:
         print()
         dim(f"{len(skipped)} tools left out: they need a tier above {tier}.")
@@ -360,8 +412,7 @@ def build_plan(picked):
 
     plan = []
     if any(k == "git" for k, _, _ in others):
-        plan.append(("sh", 'export WTF_SRC="${WTF_SRC:-$HOME/wtf/src}"; mkdir -p "$WTF_SRC"',
-                     "where cloned sources land"))
+        plan.append(("sh", 'mkdir -p "$WTF_SRC"', "clones land in ~/wtf/src"))
     for r in sorted(repos):
         plan.append(("pkg", f"pkg install -y {r}-repo", f"{r} repo, required below"))
     if pkgs:
@@ -378,10 +429,12 @@ def build_plan(picked):
 
 
 def cmd_version(_):
-    print(f"androidWTF {VERSION}")
     t, src = device_tier()
-    print(f"tier       {t if t is not None else '?'} ({src})")
-    print(f"catalogue  {ROOT}")
+    c = TIER_COLOUR.get(t, YELLOW)
+    print(f"{BOLD}androidWTF{RESET} {VERSION}")
+    print(f"{GREY}tier{RESET}       {c}{t if t is not None else '?'}{RESET} {GREY}({src}){RESET}")
+    print(f"{GREY}catalogue{RESET}  {ROOT}")
+    print(f"{GREY}width{RESET}      {width()} cols")
 
 
 def cmd_help(_):

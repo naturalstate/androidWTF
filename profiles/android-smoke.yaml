@@ -1,0 +1,14 @@
+profile: android-smoke
+description: >
+  Smoke test. Installs four small tools, one per mechanism — an apt package, a
+  pip package, a Go module and a shallow clone — so one run tells you whether a
+  fresh install actually works. Use this before trusting any bigger profile.
+requires_tier: 0
+reversible: true
+
+# No modules: the point is to isolate the install engine. Nothing here touches
+# the shell, the prompt or the storage permission.
+modules: []
+
+bundles:
+  - smoke

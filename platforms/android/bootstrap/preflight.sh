@@ -20,11 +20,39 @@
 
 set -uo pipefail
 
-BOLD=$'\033[1m'; DIM=$'\033[2m'; GREEN=$'\033[32m'; YELLOW=$'\033[33m'; RED=$'\033[31m'; CYAN=$'\033[36m'; RESET=$'\033[0m'
+# Phone terminals are narrow and render SGR 2 (faint) as near-invisible grey,
+# so this uses bright-black instead and sizes every row to the real width.
+BOLD=$'\033[1m'; DIM=$'\033[90m'; GREEN=$'\033[32m'; YELLOW=$'\033[33m'; RED=$'\033[31m'; CYAN=$'\033[36m'; RESET=$'\033[0m'
+
+COLS="${COLUMNS:-}"
+[ -z "$COLS" ] && COLS="$(tput cols 2>/dev/null || true)"
+[ -z "$COLS" ] && COLS="$(stty size 2>/dev/null | cut -d' ' -f2 || true)"
+case "$COLS" in ''|*[!0-9]*) COLS=50 ;; esac
+[ "$COLS" -lt 32 ] && COLS=32
+[ "$COLS" -gt 80 ] && COLS=80
+LBL=$(( COLS < 46 ? 11 : 16 ))
+
 say()  { printf '%s\n' "$*"; }
-step() { printf '%s==>%s %s\n' "$BOLD" "$RESET" "$*"; }
-warn() { printf '%s%s%s\n' "$YELLOW" "$*" "$RESET"; }
+step() { printf '%s%s%s\n' "$BOLD" "$*" "$RESET"; }
+# warn folds too — an unwrapped sentence is the most common thing to overflow a
+# phone terminal, and warnings are the lines that most need reading.
+warn() {
+	printf '%s\n' "$*" | fold -s -w $((COLS - 2)) | while IFS= read -r l; do
+		printf '  %s%s%s\n' "$YELLOW" "$l" "$RESET"
+	done
+}
 dim()  { printf '%s%s%s\n' "$DIM" "$*" "$RESET"; }
+# The literal box-drawing character rather than printf '\uXXXX', which needs
+# bash 4.2+ and macOS still ships 3.2.
+rule() { local i=0 out=""; while [ $i -lt "$COLS" ]; do out="$out─"; i=$((i+1)); done; printf '%s%s%s\n' "$DIM" "$out" "$RESET"; }
+row()  { printf "  %s%-${LBL}s%s %s\n" "$DIM" "$1" "$RESET" "$2"; }
+# wrap folds a paragraph to the terminal and indents every line, continuations
+# included — otherwise the second line starts hard against the left margin.
+wrap() {
+	printf '%s\n' "$*" | fold -s -w $((COLS - 2)) | while IFS= read -r l; do
+		printf '  %s%s%s\n' "$DIM" "$l" "$RESET"
+	done
+}
 
 GETPROP=/system/bin/getprop
 prop() { [ -x "$GETPROP" ] && "$GETPROP" "$1" 2>/dev/null || printf ''; }
@@ -110,20 +138,25 @@ report() {
 		*) tcol="$YELLOW" ;;
 	esac
 
-	step "Device"
-	printf '    %-22s %s %s\n' "model"        "${WTF_BRAND:-?}" "${WTF_MODEL:-?}"
-	printf '    %-22s %s (API %s)\n' "android" "${WTF_RELEASE:-?}" "${WTF_SDK:-?}"
-	printf '    %-22s %s\n' "arch"            "${WTF_ARCH:-?}"
-	printf '    %-22s %s\n' "kernel"          "${WTF_KERNEL:-?}"
-	printf '    %-22s %s\n' "selinux"         "${WTF_SELINUX:-?}"
+	local kver
+	kver="${WTF_KERNEL:-?}"
+	[ "$COLS" -lt 46 ] && kver="$(printf '%s' "$kver" | cut -c1-24)"
+
+	rule
+	step "DEVICE"
+	row "model"   "${WTF_BRAND:-?} ${WTF_MODEL:-?}"
+	row "android" "${WTF_RELEASE:-?}  ${DIM}API${RESET} ${WTF_SDK:-?}"
+	row "arch"    "${WTF_ARCH:-?}"
+	row "kernel"  "$kver"
+	row "selinux" "${WTF_SELINUX:-?}"
 	say ""
-	step "Capability"
-	printf '    %-22s %s\n' "root"        "$([ "$WTF_ROOT" = yes ] && printf '%syes%s' "$GREEN" "$RESET" || printf '%s%s%s' "$DIM" "$WTF_ROOT" "$RESET")"
-	printf '    %-22s %s\n' "shizuku"     "$([ "$WTF_SHIZUKU" = installed ] && printf '%sinstalled%s' "$GREEN" "$RESET" || printf '%sno%s' "$DIM" "$RESET")"
-	printf '    %-22s %s\n' "nethunter"   "$([ "$WTF_NETHUNTER" = kernel ] && printf '%skernel%s' "$GREEN" "$RESET" || printf '%s%s%s' "$DIM" "$WTF_NETHUNTER" "$RESET")"
-	printf '    %-22s %s\n' "usb host (otg)" "$(yesno $WTF_USBHOST)"
-	printf '    %-22s %s\n' "nfc"            "$(yesno $WTF_NFC)"
-	printf '    %-22s %s\n' "bluetooth le"   "$(yesno $WTF_BLE)"
+	step "CAPABILITY"
+	if [ "$WTF_ROOT" = yes ]; then row "root" "${GREEN}yes${RESET}"; else row "root" "${DIM}${WTF_ROOT}${RESET}"; fi
+	if [ "$WTF_SHIZUKU" = installed ]; then row "shizuku" "${GREEN}installed${RESET}"; else row "shizuku" "${DIM}no${RESET}"; fi
+	if [ "$WTF_NETHUNTER" = kernel ]; then row "nethunter" "${GREEN}kernel${RESET}"; else row "nethunter" "${DIM}${WTF_NETHUNTER}${RESET}"; fi
+	row "usb otg" "$(yesno $WTF_USBHOST)"
+	row "nfc"     "$(yesno $WTF_NFC)"
+	row "ble"     "$(yesno $WTF_BLE)"
 	# Built as a variable rather than inline: a `case` inside $( ) has its
 	# pattern `)` read as the end of the substitution.
 	local blurb
@@ -135,22 +168,27 @@ report() {
 		3) blurb='NetHunter kernel. Monitor mode and injection.' ;;
 	esac
 	say ""
-	printf '%s==>%s Tier %s%s%s — %s\n' "$BOLD" "$RESET" "$tcol" "${WTF_TIER:-?}" "$RESET" "$blurb"
+	rule
+	printf '  %sTIER %s%s%s\n' "$BOLD" "$tcol" "${WTF_TIER:-?}" "$RESET"
+	wrap "$blurb"
+	rule
 }
 
 advise() {
 	local n=0
 	[ "$WTF_SHIZUKU" = no ] && [ "$WTF_TIER" = 0 ] && [ -n "$WTF_SDK" ] && {
-		n=1; say ""; dim "Shizuku would move this device to Tier 1 for free — pairing over wireless"
-		dim "debugging is reversible and voids nothing.  wtf catalogue --bundle device"
+		n=1; say ""
+		wrap "Shizuku would move this device to Tier 1 for free. Pairing over wireless debugging is reversible and voids nothing."
+		dim "  wtf catalogue --bundle device"
 	}
 	[ "$WTF_USBHOST" = 1 ] && {
-		n=1; say ""; dim "No USB host support: the SDR, serial and Proxmark entries cannot work here"
-		dim "no matter which tier you reach."
+		n=1; say ""
+		wrap "No USB host support, so the SDR, serial and Proxmark entries cannot work here no matter which tier you reach."
 	}
 	[ "$WTF_ROOT" = maybe ] && {
-		n=1; say ""; warn "A root binary or manager is present but 'su' did not return uid=0."
-		dim "Grant Termux root once, then re-run: wtf doctor"
+		n=1; say ""
+		warn "A root binary is present but 'su' did not return uid=0."
+		wrap "Grant Termux root once, then re-run: wtf doctor"
 	}
 	return $n
 }
@@ -158,7 +196,9 @@ advise() {
 blocking() {
 	local fail=0
 	if [ -z "${PREFIX:-}" ]; then
-		warn "Not running inside Termux (\$PREFIX unset)."; fail=1
+		warn "Not running inside Termux."
+		wrap "\$PREFIX is unset, so this is not a Termux shell."
+		fail=1
 	fi
 	if [ -z "$WTF_SDK" ]; then
 		warn "Could not read ro.build.version.sdk — this does not look like Android."; fail=1
@@ -171,9 +211,8 @@ blocking() {
 		# catalogue's minSdk values land.
 		say ""
 		warn "Android API $WTF_SDK is below 29 (Android 10)."
-		dim  "Termux and the shell tooling are fine — Termux itself supports API 24+."
-		dim  "Some catalogue APKs will refuse to install. Prefer the termux bundles:"
-		dim  "    wtf list --profile android-minimal"
+		wrap "Termux and the shell tooling are fine; Termux itself supports API 24+. Some catalogue APKs will refuse to install."
+		dim  "  wtf list --profile android-minimal"
 	fi
 	return $fail
 }

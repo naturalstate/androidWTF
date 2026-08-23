@@ -1,0 +1,53 @@
+bundle: smoke
+description: >
+  Four small tools, one per install mechanism, for proving a fresh install
+  works end to end. Deliberately tiny: the point is to exercise every code path
+  in the engine, not to be useful.
+tools:
+  - id: smoke-pkg
+    name: nmap
+    desc: Termux apt package. Proves the pkg path and gives you something obviously testable.
+    tier: 0
+    profiles: [smoke]
+    status: maintained
+    upstream: 'termux:nmap'
+    checked: 2026-08-23
+    notes: 'Verify with: nmap -sT -p 80,443 scanme.nmap.org'
+    install:
+      - {provider: pkg, id: nmap}
+
+  - id: smoke-pip
+    name: httpie
+    desc: Python package. Proves pip works and that the python toolchain step fires first.
+    tier: 0
+    profiles: [smoke]
+    status: maintained
+    upstream: 'pypi:httpie'
+    checked: 2026-08-23
+    notes: 'Verify with: http --version'
+    install:
+      - {provider: pip, id: httpie}
+
+  - id: smoke-go
+    name: ffuf
+    desc: Go module. Proves the go toolchain installs and builds. Slowest step by far.
+    tier: 0
+    profiles: [smoke]
+    status: maintained
+    upstream: ffuf/ffuf
+    checked: 2026-08-23
+    notes: 'Compiles on device — allow several minutes. Verify with: ~/go/bin/ffuf -V'
+    install:
+      - {provider: go, id: github.com/ffuf/ffuf/v2}
+
+  - id: smoke-git
+    name: PayloadsAllTheThings
+    desc: Shallow clone. Proves the git path and the WTF_SRC directory. Small enough to be quick.
+    tier: 0
+    profiles: [smoke]
+    status: maintained
+    upstream: swisskyrepo/PayloadsAllTheThings
+    checked: 2026-08-23
+    notes: 'Lands in ~/wtf/src. Verify with: ls ~/wtf/src/PayloadsAllTheThings'
+    install:
+      - {provider: git, id: 'https://github.com/swisskyrepo/PayloadsAllTheThings'}
