@@ -162,8 +162,18 @@ blocking() {
 	fi
 	if [ -z "$WTF_SDK" ]; then
 		warn "Could not read ro.build.version.sdk — this does not look like Android."; fail=1
+	elif [ "$WTF_SDK" -lt 24 ] 2>/dev/null; then
+		warn "Android API $WTF_SDK is below Termux's own floor of 24 (Android 7)."; fail=1
 	elif [ "$WTF_SDK" -lt 29 ] 2>/dev/null; then
-		warn "Android API $WTF_SDK is below the catalogue's floor of 29 (Android 10)."; fail=1
+		# Not fatal. Termux supports API 24+, and nearly all of the shell
+		# catalogue runs there. What degrades is the APK half: Android 10 is
+		# where scoped storage, the modern permission model and most of the
+		# catalogue's minSdk values land.
+		say ""
+		warn "Android API $WTF_SDK is below 29 (Android 10)."
+		dim  "Termux and the shell tooling are fine — Termux itself supports API 24+."
+		dim  "Some catalogue APKs will refuse to install. Prefer the termux bundles:"
+		dim  "    wtf list --profile android-minimal"
 	fi
 	return $fail
 }

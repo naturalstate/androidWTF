@@ -78,20 +78,20 @@ else
 	rm -rf "$tmp"
 fi
 
-# Preflight is allowed to stop the run. It reports what the device can do and
-# refuses only on things that would make the install meaningless.
+# Link `wtf` BEFORE preflight runs. `wtf doctor` is the tool you most need on a
+# device preflight is unhappy about, so refusing to install it because the
+# diagnosis came back badly is exactly backwards. Earlier versions did that and
+# left the user with no command at all.
+step "Linking wtf into $PREFIX/bin"
+chmod +x "$BIN_DIR/wtf" "$BIN_DIR/preflight.sh" 2>/dev/null || true
+ln -sf "$BIN_DIR/wtf" "$PREFIX/bin/wtf"
+
+# Preflight now reports; it does not gate the bootstrap. `wtf install` still
+# refuses to run steps above the tier the device actually reaches.
 PREFLIGHT="$BIN_DIR/preflight.sh"
 if [ -x "$PREFLIGHT" ]; then
-	if ! "$PREFLIGHT"; then
-		warn "preflight reported blocking issues; stopping."
-		exit 1
-	fi
+	"$PREFLIGHT" || warn "preflight reported issues — see above. 'wtf doctor' re-runs this."
 fi
-
-# Put `wtf` on PATH for this and future sessions.
-step "Linking wtf into $PREFIX/bin"
-ln -sf "$BIN_DIR/wtf" "$PREFIX/bin/wtf"
-chmod +x "$BIN_DIR/wtf" "$BIN_DIR/preflight.sh" 2>/dev/null || true
 
 say ""
 printf '%s%s✓ androidWTF installed to %s%s\n' "$BOLD" "$GREEN" "$REPO_DIR" "$RESET"
