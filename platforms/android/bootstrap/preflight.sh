@@ -206,7 +206,11 @@ report() {
 
 advise() {
 	local n=0
-	if [ "$WTF_REPO" = stale ] || [ "$WTF_REPO" = unknown ]; then
+	if [ "$WTF_REPO" = unknown ]; then
+		n=1; say ""
+		wrap "Could not read Termux's sources.list, so the package repository state is unknown. If pkg install fails, try: termux-change-repo"
+	fi
+	if [ "$WTF_REPO" = stale ]; then
 		n=1; say ""
 		warn "Termux's package repository is stale. Nothing will install."
 		wrap "The old packages.termux.org host now redirects, and apt refuses the redirect rather than following it, so it reports 'Metadata integrity can't be verified. Repository is disabled now.'"

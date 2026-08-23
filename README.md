@@ -30,6 +30,48 @@ curl -fsSL https://raw.githubusercontent.com/naturalstate/androidWTF/main/platfo
 wtf doctor
 ```
 
+## Prepping an old phone — read this first
+
+A phone that has been in a drawer is the main use case, and it is also where
+this most often goes wrong. Almost every failure is Termux being out of date,
+not the device being too old.
+
+**1. Check where Termux came from.** The Play Store build was abandoned in 2020
+and its package repositories are dead. It cannot be repaired — uninstall it and
+install the current build from
+[F-Droid](https://f-droid.org/packages/com.termux) or GitHub Releases.
+
+**2. Update Termux itself before anything else.** An old bootstrap points at
+`packages.termux.org`, which now redirects, and apt refuses to follow a redirect
+for a signed repository. You get:
+
+```
+Metadata integrity can't be verified. Repository is disabled now.
+```
+
+which reads like a security problem and is really just a stale mirror. Fix it:
+
+```bash
+termux-change-repo     # pick a working mirror
+pkg update             # confirm it works
+```
+
+If `pkg update` still fails, the app is too old to repair from inside. Reinstall
+it. You cannot upgrade a Play Store install to the F-Droid one in place — the
+signing keys differ, so it must be uninstalled first.
+
+**3. Then bootstrap.** `wtf doctor` reports the repository state under `TERMUX`
+and will tell you if this is still the problem.
+
+**4. Expect a lower tier, not a broken phone.** Below Android 10 the shell half
+of the catalogue is almost entirely intact — Termux itself supports Android 7.
+What degrades is the APK half, where minSdk floors and scoped storage bite.
+`wtf list --profile android-minimal` is the honest starting point on old
+hardware.
+
+**5. Give it room.** A Go step compiles on the device. `ffuf` takes minutes on a
+2018 phone, and a full profile will take a long time on anything slow.
+
 ## The tier model
 
 On macOS the organising question is *which package manager installs this*. On
@@ -65,6 +107,7 @@ and `--dry-run` change nothing.
 
 | Profile | Tier | Notes |
 |---|---|---|
+| `android-smoke` | 0 | Four tools, one per install mechanism. Proves a fresh install works. |
 | `android-minimal` | 0 | Termux and a working shell. Nothing else. |
 | `android-stock` | 0 | Everything that runs untouched. Warranty intact, Play Integrity intact. |
 | `android-rf` | 0 | Focused radio and hardware bench. Needs adapters, not privileges. |

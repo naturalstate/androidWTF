@@ -110,10 +110,31 @@ fi
 
 say ""
 printf '%s%s✓ androidWTF installed to %s%s\n' "$BOLD" "$GREEN" "$REPO_DIR" "$RESET"
-say ""
-dim "Start with:  wtf doctor              probe this device and report its tier"
-dim "             wtf list --profile android-stock"
-dim "             wtf install --profile android-stock --dry-run"
+
+# The repo state decides what the user should do next, so it decides what the
+# last thing on screen says. On an old phone the useful next step is repairing
+# Termux, not browsing the catalogue.
+REPO_STATE="$(bash -c 'source "'"$BIN_DIR"'/preflight.sh"; probe; echo "$WTF_REPO"' 2>/dev/null | tail -1)"
+if [ "$REPO_STATE" = stale ]; then
+	say ""
+	warn "Termux's package repository is not working on this device."
+	warn "androidWTF is installed, but nothing can be installed THROUGH it yet."
+	say ""
+	say "Fix Termux first:"
+	say "    termux-change-repo        pick a working mirror"
+	say "    pkg update                confirm it works"
+	say ""
+	dim  "If that fails, the Termux app is too old to repair from inside."
+	dim  "Reinstall it from F-Droid or GitHub Releases, then re-run this."
+	dim  "The Play Store build was abandoned in 2020 and cannot be fixed."
+	say ""
+	dim  "wtf doctor    works now, and explains the above"
+else
+	say ""
+	dim "Start with:  wtf doctor              probe this device and report its tier"
+	dim "             wtf install --profile android-smoke --dry-run"
+	dim "             wtf install --profile android-smoke"
+fi
 
 if [ -n "$PROFILE" ]; then
 	say ""

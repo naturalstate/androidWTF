@@ -31,11 +31,32 @@ case "${1:-help}" in
 esac
 
 if ! command -v python3 >/dev/null 2>&1; then
+	# Check the package repo BEFORE offering to install anything. Offering an
+	# install that cannot succeed, then dumping apt's signature errors on the
+	# user, makes a Termux problem look like an androidWTF problem. This was
+	# the actual first-run experience on an old phone.
+	REPO="$(bash -c 'source "'"$HERE"'/preflight.sh"; probe; echo "$WTF_REPO"' 2>/dev/null | tail -1)"
+	if [ "$REPO" = stale ]; then
+		warn "Python is needed for everything except 'wtf doctor' — but Termux's"
+		warn "package repository is not working, so installing it would fail."
+		printf '\n'
+		printf 'Fix Termux first:\n'
+		printf '    termux-change-repo        pick a working mirror\n'
+		printf '    pkg update                confirm it works\n'
+		printf '\n'
+		printf "If that fails, the Termux app is too old to repair from inside.\n"
+		printf "Reinstall it from F-Droid or GitHub Releases, then re-run the\n"
+		printf "bootstrap. The Play Store build cannot be fixed at all.\n\n"
+		printf "Meanwhile 'wtf doctor' works and needs nothing.\n"
+		exit 1
+	fi
 	warn "Python is required for everything except 'wtf doctor'."
 	printf 'Install it now with pkg? [y/N] '
 	read -r reply
 	case "$reply" in
-		[yY]*) pkg install -y python ;;
+		[yY]*) pkg install -y python || {
+			warn "That failed. Run 'wtf doctor' — it reports why."; exit 1; }
+			;;
 		*) warn "Install it and re-run: pkg install -y python"; exit 1 ;;
 	esac
 fi

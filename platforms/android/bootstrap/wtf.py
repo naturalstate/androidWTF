@@ -384,7 +384,7 @@ def cmd_install(args):
 
     # Every pkg step, and therefore the pip and go toolchain steps behind them,
     # depends on a working repo. Failing twenty times in a row teaches nothing.
-    if any(k == "pkg" for k, _, _ in plan) and repo_health() in ("stale", "unknown"):
+    if any(k == "pkg" for k, _, _ in plan) and repo_health() == "stale":
         print()
         warn("Termux's package repository is not usable, so every step here would fail.")
         dim("Run 'wtf doctor' for the fix. Re-run this once pkg update works.")
