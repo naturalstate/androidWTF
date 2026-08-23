@@ -24,7 +24,9 @@ warn() { printf '%s%s%s\n' "$YELLOW" "$*" "$RESET"; }
 # doctor is pure bash so it works before anything is installed.
 case "${1:-help}" in
 	doctor)
-		exec "$HERE/preflight.sh"
+		# Explicit bash: the repo copy carries a portable /usr/bin/env shebang,
+		# which does not exist on Android.
+		exec bash "$HERE/preflight.sh"
 		;;
 esac
 
