@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.HelpOutline
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -36,7 +37,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-private enum class Tab { Home, Catalogue, Setup }
+private enum class Tab { Home, Catalogue, Setup, Help }
 
 @Composable
 private fun App(cat: Catalogue) {
@@ -86,6 +87,17 @@ private fun App(cat: Catalogue) {
                     ),
                 )
                 NavigationBarItem(
+                    selected = tab == Tab.Help,
+                    onClick = { tab = Tab.Help },
+                    icon = { Icon(Icons.Default.HelpOutline, null) },
+                    label = { Text("Help") },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = Accent, selectedTextColor = Accent,
+                        unselectedIconColor = Muted, unselectedTextColor = Muted,
+                        indicatorColor = Accent.copy(alpha = 0.14f),
+                    ),
+                )
+                NavigationBarItem(
                     selected = tab == Tab.Catalogue,
                     onClick = { tab = Tab.Catalogue },
                     icon = { Icon(Icons.Default.Apps, null) },
@@ -119,6 +131,7 @@ private fun App(cat: Catalogue) {
                     onOpenFilters = { showFilters = true },
                     onOpenTool = { detail = it },
                 )
+                Tab.Help -> HelpScreen()
                 Tab.Setup -> SetupScreen(
                     version = version,
                     tier = deviceTier,

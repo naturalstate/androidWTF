@@ -123,17 +123,13 @@ fun SetupScreen(version: String, tier: Int?, deviceSummary: String?, onRunDoctor
         )
 
         Spacer(Modifier.height(26.dp))
-        Text("EDITING THE FILE WITHOUT A TERMINAL", style = MaterialTheme.typography.labelSmall, color = Accent)
-        Spacer(Modifier.height(8.dp))
-        Text(
-            "The commands above avoid an editor entirely, which is the easiest route. " +
-                "If you would rather see the file: Termux's own storage is private, so " +
-                "a normal file manager cannot reach it. Inside Termux, nano " +
-                "~/.termux/termux.properties opens a simple editor — arrow keys to move, " +
-                "Ctrl+O then Enter to save, Ctrl+X to quit. Delete any leading # to " +
-                "activate a line.",
-            style = MaterialTheme.typography.bodySmall,
-            color = Muted,
+        Notice(
+            title = "New to the terminal?",
+            body = "The Help tab covers all of this in detail: which keyboard you need " +
+                "to get a Ctrl key at all, how to save in nano, why a config line can " +
+                "be present and still switched off, and where each kind of tool " +
+                "installs to.",
+            accent = Tier1,
         )
 
         Spacer(Modifier.height(24.dp))
