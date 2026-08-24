@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import dev.androidwtf.app.data.Catalogue
 import dev.androidwtf.app.data.Selection
 import dev.androidwtf.app.termux.Termux
+import dev.androidwtf.app.termux.TermuxResults
 import dev.androidwtf.app.termux.TermuxState
 import dev.androidwtf.app.ui.*
 
@@ -42,10 +43,11 @@ private fun App(cat: Catalogue) {
     var tab by remember { mutableStateOf(Tab.Home) }
     var termux by remember { mutableStateOf(Termux.state(ctx)) }
 
-    // The tier comes from the engine, which we cannot query synchronously from
-    // here — RUN_COMMAND is fire-and-forget unless we register a PendingIntent
-    // receiver. MVP: unknown until the user runs doctor. See the note below.
-    val deviceTier: Int? = null
+    // Populated by `wtf doctor --json`, which now runs in the background and
+    // returns through a PendingIntent.
+    val deviceTier: Int? = TermuxResults.deviceTier
+    var showFilters by remember { mutableStateOf(false) }
+    val lastResult = TermuxResults.last
 
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -93,7 +95,18 @@ private fun App(cat: Catalogue) {
                     onOpenProfile = { p -> Termux.installProfile(ctx, p.name, dryRun = true) },
                     onBrowse = { tab = Tab.Catalogue },
                 )
-                Tab.Catalogue -> CatalogueScreen(cat, sel, deviceTier)
+                Tab.Catalogue -> CatalogueScreen(cat, sel, deviceTier) { showFilters = true }
+            }
+
+            if (showFilters) {
+                FilterSheet(sel, cat.bundles, deviceTier) { showFilters = false }
+            }
+            lastResult?.let { r ->
+                ResultSheet(
+                    result = r,
+                    onDismiss = { TermuxResults.clear() },
+                    onOpenTermux = { Termux.openTermux(ctx) },
+                )
             }
 
             if (sel.picked.isNotEmpty()) {

@@ -2,6 +2,7 @@ package dev.androidwtf.app.termux
 
 import android.content.Context
 import android.content.Intent
+import android.app.PendingIntent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
@@ -36,6 +37,7 @@ object Termux {
     private const val EXTRA_WORKDIR = "com.termux.RUN_COMMAND_WORKDIR"
     private const val EXTRA_BACKGROUND = "com.termux.RUN_COMMAND_BACKGROUND"
     private const val EXTRA_SESSION_ACTION = "com.termux.RUN_COMMAND_SESSION_ACTION"
+    private const val EXTRA_PENDING_INTENT = "com.termux.RUN_COMMAND_PENDING_INTENT"
 
     private const val PREFIX = "/data/data/com.termux/files/usr"
     private const val HOME = "/data/data/com.termux/files/home"
@@ -74,7 +76,25 @@ object Termux {
      * is worse than the terminal. The app decides *what* to install; Termux shows
      * the work.
      */
-    fun runWtf(ctx: Context, args: List<String>) {
+    /**
+     * Run `wtf <args>`.
+     *
+     * @param background true captures stdout/stderr and returns them to the app;
+     *   false opens a visible Termux session instead. Installs are long and noisy
+     *   and occasionally need input, so they run visibly; probes run in the
+     *   background so the app can render the answer itself.
+     */
+    fun runWtf(ctx: Context, args: List<String>, background: Boolean = false, label: String = "command") {
+        TermuxResults.starting(label)
+
+        // Without a PendingIntent, Termux has no way to report back and every
+        // failure looks identical to success: a button that does nothing.
+        val callback = Intent(ctx, TermuxResultReceiver::class.java)
+            .putExtra(TermuxResultReceiver.EXTRA_LABEL, label)
+        val flags = PendingIntent.FLAG_UPDATE_CURRENT or
+            (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE else 0)
+        val pending = PendingIntent.getBroadcast(ctx, label.hashCode(), callback, flags)
+
         val intent = Intent(ACTION).apply {
             setClassName(PACKAGE, SERVICE)
             // Execute bash and pass the script as its first argument, rather than
@@ -87,8 +107,9 @@ object Termux {
             putExtra(EXTRA_COMMAND_PATH, BASH)
             putExtra(EXTRA_ARGUMENTS, (listOf(WTF) + args).toTypedArray())
             putExtra(EXTRA_WORKDIR, HOME)
-            putExtra(EXTRA_BACKGROUND, false)
+            putExtra(EXTRA_BACKGROUND, background)
             putExtra(EXTRA_SESSION_ACTION, "0")
+            putExtra(EXTRA_PENDING_INTENT, pending)
         }
         // RunCommandService is a foreground service; from Android O it must be
         // started as one or the system kills it.
@@ -102,16 +123,23 @@ object Termux {
     fun install(ctx: Context, toolIds: List<String>, dryRun: Boolean = false) {
         val args = mutableListOf("install", "--tools", toolIds.joinToString(","))
         if (dryRun) args += "--dry-run"
-        runWtf(ctx, args)
+        // Dry runs are short and worth rendering in-app; real installs are long,
+        // noisy and want the terminal.
+        runWtf(ctx, args, background = dryRun, label = if (dryRun) "preview" else "install")
     }
 
     fun installProfile(ctx: Context, profile: String, dryRun: Boolean = false) {
         val args = mutableListOf("install", "--profile", profile)
         if (dryRun) args += "--dry-run"
-        runWtf(ctx, args)
+        runWtf(ctx, args, background = dryRun, label = if (dryRun) "preview" else "install")
     }
 
-    fun doctor(ctx: Context) = runWtf(ctx, listOf("doctor"))
+    /** Probes in the background and asks for JSON, so the app renders the tier itself. */
+    fun doctor(ctx: Context) =
+        runWtf(ctx, listOf("doctor", "--json"), background = true, label = TermuxResults.DOCTOR_LABEL)
+
+    /** The visible variant, for when the user wants to read it in Termux. */
+    fun doctorVisible(ctx: Context) = runWtf(ctx, listOf("doctor"), background = false, label = "doctor")
 
     fun openTermux(ctx: Context) {
         ctx.packageManager.getLaunchIntentForPackage(PACKAGE)?.let { ctx.startActivity(it) }

@@ -13,6 +13,17 @@ class Selection {
     var maxTier = mutableStateOf<Int?>(null)
     var scriptableOnly = mutableStateOf(false)
 
+    fun activeFilterCount(): Int =
+        (if (maxTier.value != null) 1 else 0) +
+            (if (bundle.value != null) 1 else 0) +
+            (if (scriptableOnly.value) 1 else 0)
+
+    fun clearFilters() {
+        maxTier.value = null
+        bundle.value = null
+        scriptableOnly.value = false
+    }
+
     fun toggle(id: String) = if (id in picked) picked.remove(id) else picked.add(id)
     fun isPicked(id: String) = id in picked
     fun clear() = picked.clear()

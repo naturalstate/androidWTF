@@ -18,6 +18,11 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidWTF">
+        <!-- Not exported: only Termux's PendingIntent, which we created, targets it. -->
+        <receiver
+            android:name=".termux.TermuxResultReceiver"
+            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

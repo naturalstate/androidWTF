@@ -49,8 +49,10 @@ warn() { printf '%s%s%s\n' "$YELLOW" "$*" "$RESET"; }
 case "${1:-help}" in
 	doctor)
 		# Explicit bash: the repo copy carries a portable /usr/bin/env shebang,
-		# which does not exist on Android.
-		exec "$BASH" "$HERE/preflight.sh"
+		# which does not exist on Android. --json is handled here too, in bash,
+		# so the app's first call never depends on Python being installed.
+		shift
+		exec "$BASH" "$HERE/preflight.sh" "$@"
 		;;
 esac
 

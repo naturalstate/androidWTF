@@ -273,9 +273,44 @@ blocking() {
 	return $fail
 }
 
+# JSON output, in pure bash on purpose.
+#
+# doctor is the first thing the app runs and the tool you most need on a device
+# that is not working. Routing it through wtf.py made it depend on Python, which
+# a fresh Termux does not have and a stale-repo phone cannot install — so the
+# app's opening move failed on exactly the devices it exists to diagnose.
+emit_json() {
+	local tri
+	tri() { case "$1" in 0) printf 'true' ;; 1) printf 'false' ;; *) printf 'null' ;; esac; }
+	jstr() { [ -z "$1" ] && printf 'null' || printf '"%s"' "$(printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g')"; }
+	jnum() { case "$1" in ''|*[!0-9]*) printf 'null' ;; *) printf '%s' "$1" ;; esac; }
+	printf '{\n'
+	printf '  "sdk": %s,\n'        "$(jnum "$WTF_SDK")"
+	printf '  "release": %s,\n'    "$(jstr "$WTF_RELEASE")"
+	printf '  "model": %s,\n'      "$(jstr "$WTF_MODEL")"
+	printf '  "brand": %s,\n'      "$(jstr "$WTF_BRAND")"
+	printf '  "arch": %s,\n'       "$(jstr "$WTF_ARCH")"
+	printf '  "kernel": %s,\n'     "$(jstr "$WTF_KERNEL")"
+	printf '  "selinux": %s,\n'    "$(jstr "$WTF_SELINUX")"
+	printf '  "root": %s,\n'       "$(jstr "$WTF_ROOT")"
+	printf '  "shizuku": %s,\n'    "$(jstr "$WTF_SHIZUKU")"
+	printf '  "nethunter": %s,\n'  "$(jstr "$WTF_NETHUNTER")"
+	printf '  "usbHost": %s,\n'    "$(tri "$WTF_USBHOST")"
+	printf '  "nfc": %s,\n'        "$(tri "$WTF_NFC")"
+	printf '  "ble": %s,\n'        "$(tri "$WTF_BLE")"
+	printf '  "tier": %s,\n'       "$(jnum "$WTF_TIER")"
+	printf '  "repo": %s,\n'       "$(jstr "$WTF_REPO")"
+	printf '  "termuxVersion": %s\n' "$(jstr "$WTF_TERMUX_VER")"
+	printf '}\n'
+}
+
 # Only run the report when executed, not when sourced.
 if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
 	probe
+	if [ "${1:-}" = "--json" ]; then
+		emit_json
+		exit 0
+	fi
 	report
 	advise || true
 	blocking || exit 1

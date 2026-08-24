@@ -5,7 +5,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -25,11 +24,13 @@ import dev.androidwtf.app.data.TIERS
 import dev.androidwtf.app.data.Tool
 
 @Composable
-fun CatalogueScreen(cat: Catalogue, sel: Selection, deviceTier: Int?) {
+fun CatalogueScreen(
+    cat: Catalogue,
+    sel: Selection,
+    deviceTier: Int?,
+    onOpenFilters: () -> Unit,
+) {
     val query by sel.query
-    val bundle by sel.bundle
-    val maxTier by sel.maxTier
-    val scriptableOnly by sel.scriptableOnly
     val shown = sel.filter(cat.tools)
 
     LazyColumn(
@@ -53,29 +54,17 @@ fun CatalogueScreen(cat: Catalogue, sel: Selection, deviceTier: Int?) {
             )
         }
 
-        // Tier filter — the axis that decides whether a tool works at all.
         item {
-            LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                item {
-                    Chip("All tiers", maxTier == null) { sel.maxTier.value = null }
-                }
-                items(TIERS) { t ->
-                    val label = if (deviceTier != null && t.n == deviceTier)
-                        "T${t.n} ${t.label} · yours" else "T${t.n} ${t.label}"
-                    Chip(label, maxTier == t.n) {
-                        sel.maxTier.value = if (maxTier == t.n) null else t.n
-                    }
-                }
-            }
-        }
-
-        item {
-            LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                item { Chip("Auto-installable", scriptableOnly) { sel.scriptableOnly.value = !scriptableOnly } }
-                item { Chip("All bundles", bundle == null) { sel.bundle.value = null } }
-                items(cat.bundles) { b ->
-                    Chip("${b.name} ${b.count}", bundle == b.name) {
-                        sel.bundle.value = if (bundle == b.name) null else b.name
+            Row(
+                Modifier.fillMaxWidth().padding(top = 4.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                val n = sel.activeFilterCount()
+                Chip(if (n > 0) "Filters · $n" else "Filters", n > 0) { onOpenFilters() }
+                if (n > 0) {
+                    TextButton(onClick = { sel.clearFilters() }) {
+                        Text("Reset", color = Muted, style = MaterialTheme.typography.bodySmall)
                     }
                 }
             }
