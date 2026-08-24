@@ -3,3 +3,13 @@ __pycache__/
 *.pyc
 dist/
 .venv/
+
+# Android
+*.iml
+.gradle/
+local.properties
+/build
+app/build
+.idea/
+*.apk
+*.aab

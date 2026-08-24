@@ -1,0 +1,2642 @@
+{
+ "version": "0.1.0-dev",
+ "bundles": [
+  {
+   "name": "automation",
+   "description": "Trigger-based field workflows, usually driving Termux scripts.",
+   "count": 4
+  },
+  {
+   "name": "comms",
+   "description": "Engagement communications, including self-hostable and offline-capable options.",
+   "count": 6
+  },
+  {
+   "name": "core",
+   "description": "Termux itself, its add-on APKs, and the terminal essentials. Installed by every profile.",
+   "count": 13
+  },
+  {
+   "name": "credaccess",
+   "description": "Password managers, TOTP and engagement-scoped credential storage.",
+   "count": 6
+  },
+  {
+   "name": "desktop",
+   "description": "Linux desktop backends for the phone. Pluggable: KeX today, AVF later.",
+   "count": 4
+  },
+  {
+   "name": "dev",
+   "description": "Editors, runtimes and the shell environment.",
+   "count": 11
+  },
+  {
+   "name": "device",
+   "description": "App and device control: Shizuku, debloat, work-profile isolation, and the root stack.",
+   "count": 11
+  },
+  {
+   "name": "egress",
+   "description": "Firewall, VPN, Tor and proxying: control over where the traffic goes.",
+   "count": 11
+  },
+  {
+   "name": "hardware",
+   "description": "NFC, RFID, BLE and USB OTG serial \u2014 the bench hardware interface.",
+   "count": 10
+  },
+  {
+   "name": "labs",
+   "description": "Deliberately vulnerable targets to practise against. PAUSED \u2014 not in any profile yet.",
+   "count": 9
+  },
+  {
+   "name": "mobile",
+   "description": "Mobile application assessment: decompile, patch, hook, intercept.",
+   "count": 9
+  },
+  {
+   "name": "network",
+   "description": "Capture, scan, map and intercept the network the device is on.",
+   "count": 18
+  },
+  {
+   "name": "radio",
+   "description": "Software defined radio, GNSS and LoRa.",
+   "count": 12
+  },
+  {
+   "name": "recon",
+   "description": "OSINT and pre-engagement reconnaissance, including offline mapping.",
+   "count": 8
+  },
+  {
+   "name": "reference",
+   "description": "Offline methodology, standards and wordlists.",
+   "count": 11
+  },
+  {
+   "name": "remote",
+   "description": "Remote access, file transfer and getting artifacts off the device.",
+   "count": 10
+  },
+  {
+   "name": "reporting",
+   "description": "Evidence capture, notes and the reporting pipeline.",
+   "count": 8
+  },
+  {
+   "name": "server",
+   "description": "Servers and listeners run from the phone. PAUSED \u2014 not in any profile yet.",
+   "count": 8
+  },
+  {
+   "name": "smoke",
+   "description": "Four small tools, one per install mechanism, for proving a fresh install works end to end. Deliberately tiny: the point is to exercise every code path in the engine, not to be useful.",
+   "count": 4
+  },
+  {
+   "name": "socialeng",
+   "description": "Social engineering support. Read the legal notes before using any of it.",
+   "count": 4
+  },
+  {
+   "name": "web",
+   "description": "Web and API testing, including the on-device intercepting proxies.",
+   "count": 12
+  },
+  {
+   "name": "wireless",
+   "description": "Wardriving and wireless attack tooling. Most of it needs a NetHunter kernel and an external adapter.",
+   "count": 6
+  }
+ ],
+ "profiles": [
+  {
+   "name": "android-minimal",
+   "description": "Termux and a working shell, nothing else. The floor everything is built on, and a sane thing to put on a phone you have not decided about yet.",
+   "requiresTier": 0
+  },
+  {
+   "name": "android-nethunter",
+   "description": "A supported device running a NetHunter kernel. Monitor mode, packet injection, HID attacks and external adapter drivers. The tier that can brick a phone.",
+   "requiresTier": 3
+  },
+  {
+   "name": "android-rf",
+   "description": "A focused radio and hardware bench: SDR, GNSS, LoRa, NFC, RFID, BLE and the OTG serial console. Runs on a stock device \u2014 most of this needs no privileges, only an adapter.",
+   "requiresTier": 0
+  },
+  {
+   "name": "android-rooted",
+   "description": "Magisk or KernelSU. Unlocks raw sockets, privileged ports, Frida, real tcpdump and LSPosed. This is also where Play Integrity stops working \u2014 use a dedicated device.",
+   "requiresTier": 2
+  },
+  {
+   "name": "android-shizuku",
+   "description": "Stock plus Shizuku, paired over wireless debugging. ADB-level privileges with no root, no PC on Android 11+, and nothing irreversible. If you do exactly one thing past stock, do this.",
+   "requiresTier": 1
+  },
+  {
+   "name": "android-smoke",
+   "description": "Smoke test. Installs four small tools, one per mechanism \u2014 an apt package, a pip package, a Go module and a shallow clone \u2014 so one run tells you whether a fresh install actually works. Use this before trusting any bigger profile.",
+   "requiresTier": 0
+  },
+  {
+   "name": "android-stock",
+   "description": "Everything that works on a completely untouched device. No bootloader unlock, no root, no warranty voided, and Play Integrity stays intact. Roughly nine tenths of the catalogue.",
+   "requiresTier": 0
+  }
+ ],
+ "tools": [
+  {
+   "id": "automate",
+   "name": "Automate",
+   "desc": "Flowchart-based automation. The third option, and the most visual.",
+   "tier": 0,
+   "bundle": "automation",
+   "provider": "play",
+   "flags": [],
+   "license": "freemium",
+   "notes": "",
+   "upstream": "play:com.llamalab.automate"
+  },
+  {
+   "id": "home-assistant",
+   "name": "Home Assistant",
+   "desc": "Companion app, and a surprisingly good generic sensor and webhook source for automations.",
+   "tier": 0,
+   "bundle": "automation",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "The F-Droid build is the 'minimal' flavour, which drops the Play Services dependencies.",
+   "upstream": "f-droid:io.homeassistant.companion.android.minimal"
+  },
+  {
+   "id": "macrodroid",
+   "name": "MacroDroid",
+   "desc": "Friendlier automation with a gentler learning curve. Less powerful than Tasker.",
+   "tier": 0,
+   "bundle": "automation",
+   "provider": "play",
+   "flags": [],
+   "license": "freemium",
+   "notes": "",
+   "upstream": "play:com.arlosoft.macrodroid"
+  },
+  {
+   "id": "tasker",
+   "name": "Tasker",
+   "desc": "Combined with Termux:Tasker this is how field workflows get built \u2014 trigger a script on arriving at a location, on a WiFi join, on a notification.",
+   "tier": 0,
+   "bundle": "automation",
+   "provider": "play",
+   "flags": [
+    "essential"
+   ],
+   "license": "paid",
+   "notes": "",
+   "upstream": "play:net.dinglisch.android.taskerm"
+  },
+  {
+   "id": "briar",
+   "name": "Briar",
+   "desc": "Peer-to-peer messaging over Tor, WiFi or Bluetooth, with no server at all. Works when the network does not.",
+   "tier": 0,
+   "bundle": "comms",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:org.briarproject.briar.android"
+  },
+  {
+   "id": "element",
+   "name": "Element",
+   "desc": "Matrix client. Self-hostable, so team comms during an engagement can stay on infrastructure you control.",
+   "tier": 0,
+   "bundle": "comms",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:im.vector.app"
+  },
+  {
+   "id": "ntfy",
+   "name": "ntfy",
+   "desc": "Open source push notifications, self-hostable. Where honeypot and canary alerts land.",
+   "tier": 0,
+   "bundle": "comms",
+   "provider": "obtainium",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:io.heckel.ntfy"
+  },
+  {
+   "id": "pushover",
+   "name": "Pushover",
+   "desc": "Commercial push notifications. Simpler than ntfy if you do not want to host anything.",
+   "tier": 0,
+   "bundle": "comms",
+   "provider": "play",
+   "flags": [],
+   "license": "paid",
+   "notes": "",
+   "upstream": "play:net.superblock.pushover"
+  },
+  {
+   "id": "signal",
+   "name": "Signal",
+   "desc": "Default for engagement comms. The GitHub build avoids Play Services where you would rather not have it.",
+   "tier": 0,
+   "bundle": "comms",
+   "provider": "obtainium",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "signalapp/Signal-Android"
+  },
+  {
+   "id": "telegram",
+   "name": "Telegram",
+   "desc": "Client-driven. Keep it if your clients use it.",
+   "tier": 0,
+   "bundle": "comms",
+   "provider": "play",
+   "flags": [],
+   "license": "free",
+   "notes": "Not in the main F-Droid repo.",
+   "upstream": "play:org.telegram.messenger"
+  },
+  {
+   "id": "connectbot",
+   "name": "ConnectBot",
+   "desc": "Lightweight open source SSH client. No account, no sync, no telemetry.",
+   "tier": 0,
+   "bundle": "core",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:org.connectbot"
+  },
+  {
+   "id": "hackers-keyboard",
+   "name": "Hacker's Keyboard",
+   "desc": "A keyboard with real Ctrl, Alt, Esc, Tab, arrows and function keys. Non-negotiable for terminal work.",
+   "tier": 0,
+   "bundle": "core",
+   "provider": "obtainium",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:org.pocketworkstation.pckeyboard"
+  },
+  {
+   "id": "nethunter",
+   "name": "Kali NetHunter",
+   "desc": "Kali's Android platform. Rootless mode installs a full Kali chroot on a stock unrooted phone; full mode needs a NetHunter kernel.",
+   "tier": 0,
+   "bundle": "core",
+   "provider": "nethunter",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "Rootless works on any device. Monitor mode and HID attacks need Tier 3.",
+   "upstream": ""
+  },
+  {
+   "id": "nethunter-store",
+   "name": "NetHunter Store",
+   "desc": "Offensive Security's app repository. The supported source for the NetHunter apps.",
+   "tier": 0,
+   "bundle": "core",
+   "provider": "nethunter",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "termius",
+   "name": "Termius",
+   "desc": "Polished SSH and SFTP client with cross-device sync. Free tier is usable; sync is paid.",
+   "tier": 0,
+   "bundle": "core",
+   "provider": "play",
+   "flags": [],
+   "license": "freemium",
+   "notes": "",
+   "upstream": "play:com.server.auditor.ssh.client"
+  },
+  {
+   "id": "termux",
+   "name": "Termux",
+   "desc": "Terminal emulator and full Linux package environment. The backbone of the whole toolkit \u2014 everything in here that matters most is a Termux package, not an APK.",
+   "tier": 0,
+   "bundle": "core",
+   "provider": "obtainium",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "F-Droid or GitHub only. The Play Store build is abandoned and its packages are years stale.",
+   "upstream": "f-droid:com.termux"
+  },
+  {
+   "id": "termux-api",
+   "name": "Termux:API",
+   "desc": "Bridges the shell to SMS, clipboard, sensors, camera, GPS, notifications and TTS. Every interesting automation script needs it.",
+   "tier": 0,
+   "bundle": "core",
+   "provider": "obtainium",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "Also requires 'pkg install termux-api' inside Termux.",
+   "upstream": "f-droid:com.termux.api"
+  },
+  {
+   "id": "termux-boot",
+   "name": "Termux:Boot",
+   "desc": "Run scripts at device boot. Needed for anything that has to survive a reboot \u2014 listeners, honeypots, sync jobs.",
+   "tier": 0,
+   "bundle": "core",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:com.termux.boot"
+  },
+  {
+   "id": "termux-float",
+   "name": "Termux:Float",
+   "desc": "A floating terminal window over other apps. Useful when you need a shell while driving a GUI tool.",
+   "tier": 0,
+   "bundle": "core",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:com.termux.window"
+  },
+  {
+   "id": "termux-styling",
+   "name": "Termux:Styling",
+   "desc": "Fonts and colour schemes for Termux. Where the androidWTF theme gets applied.",
+   "tier": 0,
+   "bundle": "core",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:com.termux.styling"
+  },
+  {
+   "id": "termux-tasker",
+   "name": "Termux:Tasker",
+   "desc": "Exposes Termux scripts as Tasker actions. Combined with Tasker this is the automation backbone.",
+   "tier": 0,
+   "bundle": "core",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:com.termux.tasker"
+  },
+  {
+   "id": "termux-widget",
+   "name": "Termux:Widget",
+   "desc": "Home screen shortcuts that launch a script with one tap. This is how field workflows get usable.",
+   "tier": 0,
+   "bundle": "core",
+   "provider": "obtainium",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:com.termux.widget"
+  },
+  {
+   "id": "termux-x11",
+   "name": "Termux:X11",
+   "desc": "X11 display server for Termux, for running GUI Linux applications.",
+   "tier": 0,
+   "bundle": "core",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "Pairs with the Linux Desktop module.",
+   "upstream": "termux/termux-x11"
+  },
+  {
+   "id": "aegis",
+   "name": "Aegis Authenticator",
+   "desc": "Open source TOTP with an encrypted, exportable vault. Prefer it over Google Authenticator \u2014 you can actually get your seeds back out.",
+   "tier": 0,
+   "bundle": "credaccess",
+   "provider": "obtainium",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:com.beemdevelopment.aegis"
+  },
+  {
+   "id": "bitwarden",
+   "name": "Bitwarden",
+   "desc": "Password manager. Self-hostable with Vaultwarden if you would rather not use their cloud.",
+   "tier": 0,
+   "bundle": "credaccess",
+   "provider": "obtainium",
+   "flags": [
+    "essential"
+   ],
+   "license": "freemium",
+   "notes": "No longer in the main F-Droid repo \u2014 GitHub Releases or Play.",
+   "upstream": "bitwarden/android"
+  },
+  {
+   "id": "google-authenticator",
+   "name": "Google Authenticator",
+   "desc": "Same reasoning. Keep it for client accounts, not your own.",
+   "tier": 0,
+   "bundle": "credaccess",
+   "provider": "play",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "play:com.google.android.apps.authenticator2"
+  },
+  {
+   "id": "hashcat-note",
+   "name": "Cracking \u2014 do it elsewhere",
+   "desc": "Not an app. There is no usable GPU acceleration path for hashcat on Android. Capture on the phone, crack on the homelab.",
+   "tier": 0,
+   "bundle": "credaccess",
+   "provider": "builtin",
+   "flags": [],
+   "license": "free",
+   "notes": "john the ripper runs in Termux on CPU, and is slow enough to be a novelty.",
+   "upstream": ""
+  },
+  {
+   "id": "keepassdx",
+   "name": "KeePassDX",
+   "desc": "Offline KDBX vault. Useful for engagement-scoped credentials you want kept out of your personal manager entirely.",
+   "tier": 0,
+   "bundle": "credaccess",
+   "provider": "obtainium",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:com.kunzisoft.keepass.libre"
+  },
+  {
+   "id": "ms-authenticator",
+   "name": "Microsoft Authenticator",
+   "desc": "Needed for client Entra tenants whether you like it or not.",
+   "tier": 0,
+   "bundle": "credaccess",
+   "provider": "play",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "play:com.azure.authenticator"
+  },
+  {
+   "id": "avf-terminal",
+   "name": "Android Linux Terminal",
+   "desc": "Not an app. Android 15+ ships a native Linux terminal on the Android Virtualization Framework \u2014 a real VM with a real kernel, not PRoot. It will obsolete most of this category.",
+   "tier": 0,
+   "bundle": "desktop",
+   "provider": "builtin",
+   "flags": [],
+   "license": "free",
+   "notes": "Enable in Developer Options where your device supports it. Design the Linux layer with a pluggable backend so you can move to this.",
+   "upstream": ""
+  },
+  {
+   "id": "droiddesk",
+   "name": "DroidDesk",
+   "desc": "Community desktop option. Supported as a documented recipe that shells out to their installer, never as vendored code.",
+   "tier": 0,
+   "bundle": "desktop",
+   "provider": "obtainium",
+   "flags": [
+    "gpl"
+   ],
+   "license": "free",
+   "notes": "GPL-3.0. Bundling or linking its code would make androidWTF GPL-3.0 too. Their own COMPLIANCE.md flags unresolved provenance issues.",
+   "upstream": "orailnoor/DroidDesk"
+  },
+  {
+   "id": "nethunter-kex",
+   "name": "NetHunter KeX",
+   "desc": "Full Kali desktop over VNC. Offensive Security maintained, works in NetHunter Rootless on a stock phone. The recommended desktop backend.",
+   "tier": 0,
+   "bundle": "desktop",
+   "provider": "nethunter",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "Needs a VNC client \u2014 RealVNC Viewer is the reliable one.",
+   "upstream": ""
+  },
+  {
+   "id": "termux-x11-desktop",
+   "name": "Termux:X11 + XFCE",
+   "desc": "A lighter desktop straight out of Termux, no chroot involved. Faster than VNC, fewer batteries included.",
+   "tier": 0,
+   "bundle": "desktop",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "termux/termux-x11"
+  },
+  {
+   "id": "acode",
+   "name": "Acode",
+   "desc": "Capable code editor with plugin support and SFTP. The better default of the mobile editors.",
+   "tier": 0,
+   "bundle": "dev",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "freemium",
+   "notes": "",
+   "upstream": "f-droid:com.foxdebug.acode"
+  },
+  {
+   "id": "git",
+   "name": "git",
+   "desc": "Version control, and how most of the catalogue's source actually arrives.",
+   "tier": 0,
+   "bundle": "dev",
+   "provider": "pkg",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "github-app",
+   "name": "GitHub",
+   "desc": "Issues, PRs and code review from the phone.",
+   "tier": 0,
+   "bundle": "dev",
+   "provider": "play",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "play:com.github.android"
+  },
+  {
+   "id": "golang",
+   "name": "Go",
+   "desc": "Needed to build the ProjectDiscovery tooling from source when a package lags.",
+   "tier": 0,
+   "bundle": "dev",
+   "provider": "pkg",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "neovim",
+   "name": "neovim",
+   "desc": "The editor you already use, in Termux, with your existing config.",
+   "tier": 0,
+   "bundle": "dev",
+   "provider": "pkg",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "nodejs",
+   "name": "Node.js",
+   "desc": "Runs Juice Shop and most of the JS-based tooling directly.",
+   "tier": 0,
+   "bundle": "dev",
+   "provider": "pkg",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "python",
+   "name": "Python",
+   "desc": "The runtime most of the tooling in here is written in.",
+   "tier": 0,
+   "bundle": "dev",
+   "provider": "pkg",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "ripgrep",
+   "name": "ripgrep / fd / jq",
+   "desc": "The search and parse trio. You will use these more than anything else in here.",
+   "tier": 0,
+   "bundle": "dev",
+   "provider": "pkg",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "spck",
+   "name": "Spck Editor",
+   "desc": "Git-aware editor with a built-in preview. Alternative to Acode.",
+   "tier": 0,
+   "bundle": "dev",
+   "provider": "play",
+   "flags": [],
+   "license": "freemium",
+   "notes": "",
+   "upstream": "play:io.spck"
+  },
+  {
+   "id": "starship",
+   "name": "Starship",
+   "desc": "The prompt, shared with the other WTF builds so every shell looks the same.",
+   "tier": 0,
+   "bundle": "dev",
+   "provider": "pkg",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "tmux",
+   "name": "tmux",
+   "desc": "Sessions that survive Termux being backgrounded and killed. Not optional on a phone.",
+   "tier": 0,
+   "bundle": "dev",
+   "provider": "pkg",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "aurora-store",
+   "name": "Aurora Store",
+   "desc": "Play Store apps without a Google account, using anonymous sessions.",
+   "tier": 0,
+   "bundle": "device",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "Anonymous sessions break periodically. Paid apps still need a real account.",
+   "upstream": "f-droid:com.aurora.store"
+  },
+  {
+   "id": "insular",
+   "name": "Insular",
+   "desc": "Work profile isolation, a fork of Island. Alternative to Shelter \u2014 pick one.",
+   "tier": 0,
+   "bundle": "device",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:com.oasisfeng.island.fdroid"
+  },
+  {
+   "id": "obtainium",
+   "name": "Obtainium",
+   "desc": "Installs and auto-updates sideloaded apps straight from GitHub Releases, F-Droid and arbitrary URLs. Without this, maintaining seventy sideloaded APKs by hand is what kills the project in six months.",
+   "tier": 0,
+   "bundle": "device",
+   "provider": "obtainium",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "androidWTF ships an Obtainium config you can import in one go.",
+   "upstream": "ImranR98/Obtainium"
+  },
+  {
+   "id": "shelter",
+   "name": "Shelter",
+   "desc": "Runs the catalogue inside an isolated Android work profile you can freeze when you are not on an engagement. Keeps the pentest apps away from your banking apps.",
+   "tier": 0,
+   "bundle": "device",
+   "provider": "obtainium",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:net.typeblog.shelter"
+  },
+  {
+   "id": "shizuku",
+   "name": "Shizuku",
+   "desc": "Grants apps ADB-level privileges with no root, by pairing over wireless debugging. On Android 11+ this needs no PC at all. The single highest-value install in the catalogue after Termux.",
+   "tier": 0,
+   "bundle": "device",
+   "provider": "obtainium",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "Installing it is Tier 0; the privileges it unlocks are Tier 1. Must be re-paired after every reboot unless rooted.",
+   "upstream": "RikkaApps/Shizuku"
+  },
+  {
+   "id": "app-manager",
+   "name": "App Manager",
+   "desc": "Manifest viewer, component blocker, AppOps control, signature checks, APK extraction and tracker analysis. Best-in-class, and directly useful for mobile app assessments.",
+   "tier": 1,
+   "bundle": "device",
+   "provider": "obtainium",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "MuntashirAkon/AppManager"
+  },
+  {
+   "id": "canta",
+   "name": "Canta",
+   "desc": "Uninstall system bloat through Shizuku, with a crowd-sourced safety rating per package. The debloat engine.",
+   "tier": 1,
+   "bundle": "device",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "samolego/Canta"
+  },
+  {
+   "id": "kernelsu",
+   "name": "KernelSU",
+   "desc": "Kernel-based root, an alternative to Magisk on supported kernels.",
+   "tier": 2,
+   "bundle": "device",
+   "provider": "obtainium",
+   "flags": [
+    "integrity"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "tiann/KernelSU"
+  },
+  {
+   "id": "lsposed",
+   "name": "LSPosed",
+   "desc": "Xposed framework for hooking app internals at runtime. The base for SSL unpinning modules.",
+   "tier": 2,
+   "bundle": "device",
+   "provider": "obtainium",
+   "flags": [
+    "integrity"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "LSPosed/LSPosed"
+  },
+  {
+   "id": "magisk",
+   "name": "Magisk",
+   "desc": "Systemless root. The gate for everything in Tier 2.",
+   "tier": 2,
+   "bundle": "device",
+   "provider": "obtainium",
+   "flags": [
+    "integrity"
+   ],
+   "license": "free",
+   "notes": "Breaks Play Integrity. Banking, payment and MDM apps will refuse to run.",
+   "upstream": "topjohnwu/Magisk"
+  },
+  {
+   "id": "ssl-unpinning",
+   "name": "TrustMeAlready",
+   "desc": "Xposed module that disables SSL verification and pinning system-wide, so an intercepting proxy can see app traffic.",
+   "tier": 2,
+   "bundle": "device",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "Needed for most real mobile app assessments. objection can do the same per-process without a module.",
+   "upstream": "ViRb3/TrustMeAlready"
+  },
+  {
+   "id": "cloudflared",
+   "name": "cloudflared",
+   "desc": "Expose a service running on the phone to the internet without a public IP.",
+   "tier": 0,
+   "bundle": "egress",
+   "provider": "pkg",
+   "flags": [],
+   "license": "free",
+   "notes": "Also useful for getting a callback to a device behind carrier NAT.",
+   "upstream": ""
+  },
+  {
+   "id": "every-proxy",
+   "name": "Every Proxy",
+   "desc": "Turns the phone into an HTTP and SOCKS5 proxy. Genuinely handy for pivoting a laptop through the phone's connection.",
+   "tier": 0,
+   "bundle": "egress",
+   "provider": "play",
+   "flags": [],
+   "license": "freemium",
+   "notes": "",
+   "upstream": "play:com.gorillasoftware.everyproxy"
+  },
+  {
+   "id": "netguard",
+   "name": "NetGuard",
+   "desc": "Per-app firewall with no root, via the VPN service. The simpler, more predictable option.",
+   "tier": 0,
+   "bundle": "egress",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "Same VPN slot conflict. Pick one of NetGuard or RethinkDNS.",
+   "upstream": "M66B/NetGuard"
+  },
+  {
+   "id": "openvpn-android",
+   "name": "OpenVPN for Android",
+   "desc": "Open source OpenVPN client. Plenty of clients still hand you a .ovpn file.",
+   "tier": 0,
+   "bundle": "egress",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:de.blinkt.openvpn"
+  },
+  {
+   "id": "orbot",
+   "name": "Orbot",
+   "desc": "Tor as a transparent proxy or VPN for selected apps.",
+   "tier": 0,
+   "bundle": "egress",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "Not in the main F-Droid repo \u2014 Guardian Project run their own, or take it from GitHub Releases.",
+   "upstream": "guardianproject/orbot-android"
+  },
+  {
+   "id": "proxychains",
+   "name": "proxychains-ng",
+   "desc": "Force any Termux CLI tool through a SOCKS proxy.",
+   "tier": 0,
+   "bundle": "egress",
+   "provider": "pkg",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "rethinkdns",
+   "name": "RethinkDNS",
+   "desc": "Per-app firewall, DNS filtering and a WireGuard client in one. Arguably strictly better than NetGuard now.",
+   "tier": 0,
+   "bundle": "egress",
+   "provider": "obtainium",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "Uses the VPN slot, so it conflicts with PCAPdroid and other VPN-mode apps.",
+   "upstream": "celzero/rethink-app"
+  },
+  {
+   "id": "tailscale",
+   "name": "Tailscale",
+   "desc": "Mesh VPN over WireGuard with SSO. Gets the phone onto your homelab with no port forwarding.",
+   "tier": 0,
+   "bundle": "egress",
+   "provider": "play",
+   "flags": [],
+   "license": "freemium",
+   "notes": "",
+   "upstream": "play:com.tailscale.ipn"
+  },
+  {
+   "id": "tor-browser",
+   "name": "Tor Browser",
+   "desc": "The browser, not the proxy. Use with or without Orbot.",
+   "tier": 0,
+   "bundle": "egress",
+   "provider": "play",
+   "flags": [],
+   "license": "free",
+   "notes": "Not in the main F-Droid repo. The Guardian Project repo carries it too.",
+   "upstream": "play:org.torproject.torbrowser"
+  },
+  {
+   "id": "twingate",
+   "name": "Twingate",
+   "desc": "Zero-trust network access. Alternative path to the same homelab.",
+   "tier": 0,
+   "bundle": "egress",
+   "provider": "play",
+   "flags": [],
+   "license": "freemium",
+   "notes": "",
+   "upstream": "play:com.twingate"
+  },
+  {
+   "id": "wireguard",
+   "name": "WireGuard",
+   "desc": "The VPN you will actually use for lab and client access. Fast, simple config, no daemon to babysit.",
+   "tier": 0,
+   "bundle": "egress",
+   "provider": "play",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "Not in the main F-Droid repo. WireGuard run their own F-Droid-compatible repo at f-droid.wireguard.com if you would rather avoid Play.",
+   "upstream": "play:com.wireguard.android"
+  },
+  {
+   "id": "chameleon-ultra-gui",
+   "name": "Chameleon Ultra GUI",
+   "desc": "Controls a Chameleon Ultra over BLE or USB. Slot management, card emulation, reads.",
+   "tier": 0,
+   "bundle": "hardware",
+   "provider": "obtainium",
+   "flags": [
+    "exthw"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "GameTec-live/ChameleonUltraGUI"
+  },
+  {
+   "id": "flipper",
+   "name": "Flipper Mobile App",
+   "desc": "Official companion for the Flipper Zero.",
+   "tier": 0,
+   "bundle": "hardware",
+   "provider": "play",
+   "flags": [
+    "exthw"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "play:com.flipperdevices.app"
+  },
+  {
+   "id": "mifare-classic-tool",
+   "name": "MIFARE Classic Tool",
+   "desc": "Key dictionary attacks and sector dumping on MIFARE Classic. The core on-phone RFID tool.",
+   "tier": 0,
+   "bundle": "hardware",
+   "provider": "obtainium",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "Needs an NXP NFC controller. Many phones cannot read Classic at all.",
+   "upstream": "f-droid:de.syss.MifareClassicTool"
+  },
+  {
+   "id": "nfc-tools",
+   "name": "NFC Tools",
+   "desc": "Read, write and emulate NDEF tags. The PRO version adds tasks and scripting.",
+   "tier": 0,
+   "bundle": "hardware",
+   "provider": "play",
+   "flags": [],
+   "license": "freemium",
+   "notes": "",
+   "upstream": "play:com.wakdev.wdnfc"
+  },
+  {
+   "id": "nrf-connect",
+   "name": "nRF Connect for Mobile",
+   "desc": "The real BLE tool: scan, connect, enumerate services, read and write characteristics, log advertising. Not a generic 'BLE scanner'.",
+   "tier": 0,
+   "bundle": "hardware",
+   "provider": "play",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "Pairs directly with any Nordic nRF development board.",
+   "upstream": "play:no.nordicsemi.android.mcp"
+  },
+  {
+   "id": "nxp-taginfo",
+   "name": "NXP TagInfo",
+   "desc": "Deep tag identification \u2014 chip type, memory layout, capability container.",
+   "tier": 0,
+   "bundle": "hardware",
+   "provider": "play",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "play:com.nxp.taginfolite"
+  },
+  {
+   "id": "serial-usb-terminal",
+   "name": "Serial USB Terminal",
+   "desc": "USB OTG serial console. This is how you talk to an ESP32, a Proxmark3, a Chameleon Ultra, or anything else with a UART.",
+   "tier": 0,
+   "bundle": "hardware",
+   "provider": "play",
+   "flags": [
+    "essential",
+    "exthw"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "play:de.kai_morich.serial_usb_terminal"
+  },
+  {
+   "id": "usb-device-info",
+   "name": "USB Device Info",
+   "desc": "Identify what is plugged into OTG and confirm the phone actually supports USB host mode.",
+   "tier": 0,
+   "bundle": "hardware",
+   "provider": "play",
+   "flags": [
+    "exthw"
+   ],
+   "license": "free",
+   "notes": "Run this first \u2014 plenty of phones do not do USB host at all.",
+   "upstream": "play:aws.apps.usbDeviceEnumerator"
+  },
+  {
+   "id": "bt-hci-snoop",
+   "name": "Bluetooth HCI snoop log",
+   "desc": "Not an app. Enable the toggle in Developer Options, reproduce the pairing, then pull btsnoop_hci.log and open it in Wireshark.",
+   "tier": 1,
+   "bundle": "hardware",
+   "provider": "builtin",
+   "flags": [],
+   "license": "free",
+   "notes": "adb bugreport, or adb pull /data/misc/bluetooth/logs/btsnoop_hci.log with Shizuku or root.",
+   "upstream": ""
+  },
+  {
+   "id": "proxmark3",
+   "name": "Proxmark3 client",
+   "desc": "Compiles in Termux. The serial device permission is the hard part, not the build.",
+   "tier": 2,
+   "bundle": "hardware",
+   "provider": "pkg",
+   "flags": [
+    "exthw"
+   ],
+   "license": "free",
+   "notes": "OTG serial access from Termux normally needs root or a udev-equivalent workaround.",
+   "upstream": ""
+  },
+  {
+   "id": "androgoat",
+   "name": "AndroGoat",
+   "desc": "Kotlin vulnerable app with a broad, well-labelled issue set.",
+   "tier": 0,
+   "bundle": "labs",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "satishpatnayak/AndroGoat"
+  },
+  {
+   "id": "diva",
+   "name": "DIVA",
+   "desc": "Damn Insecure and Vulnerable App. The standard first target for Android app assessment practice.",
+   "tier": 0,
+   "bundle": "labs",
+   "provider": "obtainium",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "payatu/diva-android"
+  },
+  {
+   "id": "dvwa",
+   "name": "DVWA",
+   "desc": "The classic. Needs PHP and MariaDB in Termux, which is more setup than Juice Shop but works.",
+   "tier": 0,
+   "bundle": "labs",
+   "provider": "git",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "digininja/DVWA"
+  },
+  {
+   "id": "insecurebankv2",
+   "name": "InsecureBankv2",
+   "desc": "Vulnerable banking app with a companion backend, so you get network issues as well as app ones.",
+   "tier": 0,
+   "bundle": "labs",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "dineshshetty/Android-InsecureBankv2"
+  },
+  {
+   "id": "insecureshop",
+   "name": "InsecureShop",
+   "desc": "Modern intentionally vulnerable Android app, covering current issue classes rather than 2015 ones.",
+   "tier": 0,
+   "bundle": "labs",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "hax0rgb/InsecureShop"
+  },
+  {
+   "id": "juice-shop",
+   "name": "OWASP Juice Shop",
+   "desc": "The web target. Node, so it runs directly in Termux with no Docker and no root.",
+   "tier": 0,
+   "bundle": "labs",
+   "provider": "pkg",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "In the TUR user repo, so run 'pkg install tur-repo' first. Docker does not work reliably on non-rooted Android, so do not build the lab story around it.",
+   "upstream": ""
+  },
+  {
+   "id": "pivaa",
+   "name": "PIVAA",
+   "desc": "Purposely Insecure and Vulnerable Android Application.",
+   "tier": 0,
+   "bundle": "labs",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "HTBridge/pivaa"
+  },
+  {
+   "id": "uncrackable",
+   "name": "OWASP MASTG Crackmes",
+   "desc": "UnCrackable levels 1 to 4. Root detection, anti-tamper, native code, obfuscation.",
+   "tier": 0,
+   "bundle": "labs",
+   "provider": "obtainium",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "Levels 3 and 4 realistically need Frida, so Tier 2.",
+   "upstream": "OWASP/mastg"
+  },
+  {
+   "id": "vampi",
+   "name": "VAmPI",
+   "desc": "Deliberately vulnerable API, Python. Good pairing with Reqable on the same device.",
+   "tier": 0,
+   "bundle": "labs",
+   "provider": "git",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "erev0s/VAmPI"
+  },
+  {
+   "id": "apk-analyzer",
+   "name": "APK Analyzer",
+   "desc": "Quick on-device look at permissions, activities, certificates and manifest.",
+   "tier": 0,
+   "bundle": "mobile",
+   "provider": "play",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "play:sk.styk.martin.apkanalyzer"
+  },
+  {
+   "id": "apksigner",
+   "name": "apksigner / zipalign",
+   "desc": "Re-sign and align a patched APK so the device will install it.",
+   "tier": 0,
+   "bundle": "mobile",
+   "provider": "pkg",
+   "flags": [],
+   "license": "free",
+   "notes": "Under developer verification your own signing key will need to be registered to install on a certified device without the advanced flow.",
+   "upstream": ""
+  },
+  {
+   "id": "apktool",
+   "name": "apktool",
+   "desc": "Smali disassembly and rebuild. For patching an app rather than just reading it.",
+   "tier": 0,
+   "bundle": "mobile",
+   "provider": "pkg",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "ecliptic",
+   "name": "Ecliptic",
+   "desc": "Technology stack detection. First-party androidWTF tooling.",
+   "tier": 0,
+   "bundle": "mobile",
+   "provider": "androidwtf",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "jadx",
+   "name": "jadx",
+   "desc": "Decompiles an APK to readable Java. Runs fine in Termux with a JDK, and this is where most mobile assessment actually starts.",
+   "tier": 0,
+   "bundle": "mobile",
+   "provider": "pkg",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "mobsf",
+   "name": "MobSF",
+   "desc": "Static and dynamic analysis framework. Technically runs in Termux; realistically run it on your homelab and reach it from the phone.",
+   "tier": 0,
+   "bundle": "mobile",
+   "provider": "git",
+   "flags": [],
+   "license": "free",
+   "notes": "Heavy. A phone is the wrong place for this.",
+   "upstream": "MobSF/Mobile-Security-Framework-MobSF"
+  },
+  {
+   "id": "adb-shizuku",
+   "name": "On-device adb shell",
+   "desc": "Not an app. With Shizuku paired you get pm, dumpsys, content and settings from a local shell \u2014 most of what you would otherwise plug into a laptop for.",
+   "tier": 1,
+   "bundle": "mobile",
+   "provider": "builtin",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "frida",
+   "name": "Frida server",
+   "desc": "Runtime instrumentation \u2014 hook methods, dump arguments, bypass checks live.",
+   "tier": 2,
+   "bundle": "mobile",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "The server binary needs root. The client can run in Termux or on your laptop.",
+   "upstream": "frida/frida"
+  },
+  {
+   "id": "objection",
+   "name": "objection",
+   "desc": "Frida wrapper that does the common jobs without writing hooks: SSL pinning bypass, storage dump, class enumeration.",
+   "tier": 2,
+   "bundle": "mobile",
+   "provider": "pip",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "cellmapper",
+   "name": "CellMapper",
+   "desc": "Crowd-sourced cell site mapping and coverage data.",
+   "tier": 0,
+   "bundle": "network",
+   "provider": "play",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "play:cellmapper.net.cellmapper"
+  },
+  {
+   "id": "fing",
+   "name": "Fing",
+   "desc": "Fast network discovery with good device fingerprinting. Heavy upsell, but the free tier does the job.",
+   "tier": 0,
+   "bundle": "network",
+   "provider": "play",
+   "flags": [],
+   "license": "freemium",
+   "notes": "",
+   "upstream": "play:com.overlook.android.fing"
+  },
+  {
+   "id": "http-toolkit",
+   "name": "HTTP Toolkit",
+   "desc": "Alternative intercepting proxy with strong ADB integration and one-click certificate setup.",
+   "tier": 0,
+   "bundle": "network",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "httptoolkit/httptoolkit-android"
+  },
+  {
+   "id": "netcat",
+   "name": "netcat / socat",
+   "desc": "The two tools you actually reach for. Listeners, relays, port forwards.",
+   "tier": 0,
+   "bundle": "network",
+   "provider": "pkg",
+   "flags": [],
+   "license": "free",
+   "notes": "Ports below 1024 need root.",
+   "upstream": ""
+  },
+  {
+   "id": "network-cell-info",
+   "name": "Network Cell Info Lite",
+   "desc": "Cell tower mapping, band and signal detail, neighbouring cells.",
+   "tier": 0,
+   "bundle": "network",
+   "provider": "play",
+   "flags": [],
+   "license": "freemium",
+   "notes": "",
+   "upstream": "play:com.wilysis.cellinfolite"
+  },
+  {
+   "id": "network-survey",
+   "name": "Network Survey",
+   "desc": "Cellular, WiFi, GNSS and Bluetooth survey with logging to file. Underrated for site surveys and RF mapping.",
+   "tier": 0,
+   "bundle": "network",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:com.craxiom.networksurvey"
+  },
+  {
+   "id": "nmap",
+   "name": "nmap",
+   "desc": "The scanner. Connect scan works unprivileged; SYN scan, OS detection and anything raw-socket needs root.",
+   "tier": 0,
+   "bundle": "network",
+   "provider": "pkg",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "nmap -sT works at Tier 0. nmap -sS needs Tier 2.",
+   "upstream": ""
+  },
+  {
+   "id": "pcapdroid",
+   "name": "PCAPdroid",
+   "desc": "Packet capture with no root, by running a local VPN service. Exports real PCAP for Wireshark. With root it captures the full interface instead of just app traffic.",
+   "tier": 0,
+   "bundle": "network",
+   "provider": "obtainium",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "Tier 0 gives you app traffic only. Tier 2 gives you the whole interface.",
+   "upstream": "emanuele-f/PCAPdroid"
+  },
+  {
+   "id": "port-authority",
+   "name": "Port Authority",
+   "desc": "Open source LAN scanner and port scanner.",
+   "tier": 0,
+   "bundle": "network",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:com.aaronjwood.portauthority"
+  },
+  {
+   "id": "portdroid",
+   "name": "PortDroid",
+   "desc": "Port scanner, host discovery, DNS lookup, whois and traceroute in one app.",
+   "tier": 0,
+   "bundle": "network",
+   "provider": "play",
+   "flags": [],
+   "license": "freemium",
+   "notes": "",
+   "upstream": "play:com.stealthcopter.portdroid"
+  },
+  {
+   "id": "reqable",
+   "name": "Reqable",
+   "desc": "Modern on-device intercepting HTTP(S) proxy, the successor to HttpCanary. Inspect, rewrite and replay requests without a laptop.",
+   "tier": 0,
+   "bundle": "network",
+   "provider": "play",
+   "flags": [
+    "essential"
+   ],
+   "license": "freemium",
+   "notes": "",
+   "upstream": "play:com.reqable.android"
+  },
+  {
+   "id": "wifianalyzer",
+   "name": "WiFiAnalyzer",
+   "desc": "Channel and signal analysis. Open source, no ads, no telemetry \u2014 prefer it over the closed alternatives.",
+   "tier": 0,
+   "bundle": "network",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:com.vrem.wifianalyzer"
+  },
+  {
+   "id": "wifiman",
+   "name": "WiFiman",
+   "desc": "Ubiquiti's analyser. Clean, fast, with a good speed test and device discovery.",
+   "tier": 0,
+   "bundle": "network",
+   "provider": "play",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "play:com.ubnt.usurvey"
+  },
+  {
+   "id": "bettercap",
+   "name": "bettercap",
+   "desc": "Network attack and MITM framework. Needs raw sockets for anything beyond passive use.",
+   "tier": 2,
+   "bundle": "network",
+   "provider": "go",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "github.com/bettercap/bettercap"
+  },
+  {
+   "id": "masscan",
+   "name": "masscan",
+   "desc": "Mass port scanner. Raw sockets only, so it is root-or-nothing.",
+   "tier": 2,
+   "bundle": "network",
+   "provider": "git",
+   "flags": [],
+   "license": "free",
+   "notes": "Build from source; there is no Termux package.",
+   "upstream": "robertdavidgraham/masscan"
+  },
+  {
+   "id": "responder",
+   "name": "Responder",
+   "desc": "LLMNR, NBT-NS and MDNS poisoner.",
+   "tier": 2,
+   "bundle": "network",
+   "provider": "git",
+   "flags": [],
+   "license": "free",
+   "notes": "Binds privileged ports, so root is mandatory.",
+   "upstream": "lgandx/Responder"
+  },
+  {
+   "id": "snoopsnitch",
+   "name": "SnoopSnitch",
+   "desc": "IMSI catcher and SS7 attack detection from the baseband's own diagnostic messages.",
+   "tier": 2,
+   "bundle": "network",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "Needs root and a Qualcomm chipset. Will not work on Exynos or Tensor.",
+   "upstream": "f-droid:de.srlabs.snoopsnitch"
+  },
+  {
+   "id": "tcpdump",
+   "name": "tcpdump",
+   "desc": "Interface capture from the shell. Needs raw socket access.",
+   "tier": 2,
+   "bundle": "network",
+   "provider": "pkg",
+   "flags": [],
+   "license": "free",
+   "notes": "At Tier 0 use PCAPdroid instead.",
+   "upstream": ""
+  },
+  {
+   "id": "aprsdroid",
+   "name": "APRSdroid",
+   "desc": "Amateur packet radio over APRS-IS or a real TNC.",
+   "tier": 0,
+   "bundle": "radio",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "Not in the main F-Droid repo \u2014 take it from GitHub Releases.",
+   "upstream": "ge0rg/aprsdroid"
+  },
+  {
+   "id": "dump1090",
+   "name": "dump1090",
+   "desc": "ADS-B aircraft tracking off an RTL-SDR, from the Termux shell.",
+   "tier": 0,
+   "bundle": "radio",
+   "provider": "git",
+   "flags": [
+    "exthw"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "flightaware/dump1090"
+  },
+  {
+   "id": "gpstest",
+   "name": "GPSTest",
+   "desc": "GNSS constellation view, accuracy, and which satellite systems the phone actually uses.",
+   "tier": 0,
+   "bundle": "radio",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:com.android.gpstest.osmdroid"
+  },
+  {
+   "id": "look4sat",
+   "name": "Look4Sat",
+   "desc": "Open source satellite pass prediction and tracking.",
+   "tier": 0,
+   "bundle": "radio",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:com.rtbishop.look4sat"
+  },
+  {
+   "id": "meshtastic",
+   "name": "Meshtastic",
+   "desc": "LoRa mesh networking. Talks to Heltec, T-Beam and RAK boards over BLE.",
+   "tier": 0,
+   "bundle": "radio",
+   "provider": "obtainium",
+   "flags": [
+    "exthw"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:com.geeksville.mesh"
+  },
+  {
+   "id": "nmea-tools",
+   "name": "NMEA Tools",
+   "desc": "Read an external GPS dongle over OTG and feed it to the system location provider.",
+   "tier": 0,
+   "bundle": "radio",
+   "provider": "play",
+   "flags": [
+    "exthw"
+   ],
+   "license": "freemium",
+   "notes": "",
+   "upstream": "play:com.peterhohsy.nmeatools"
+  },
+  {
+   "id": "repeaterbook",
+   "name": "RepeaterBook",
+   "desc": "Amateur repeater directory with offline data.",
+   "tier": 0,
+   "bundle": "radio",
+   "provider": "play",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "play:com.zbm2.repeaterbook"
+  },
+  {
+   "id": "rf-analyzer",
+   "name": "RF Analyzer",
+   "desc": "Open source spectrum analyser supporting RTL-SDR and HackRF.",
+   "tier": 0,
+   "bundle": "radio",
+   "provider": "obtainium",
+   "flags": [
+    "exthw"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "demantz/RFAnalyzer"
+  },
+  {
+   "id": "rtl-433",
+   "name": "rtl_433",
+   "desc": "Decodes the 433MHz sensor soup \u2014 weather stations, TPMS, doorbells, remotes.",
+   "tier": 0,
+   "bundle": "radio",
+   "provider": "git",
+   "flags": [
+    "exthw"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "merbanan/rtl_433"
+  },
+  {
+   "id": "rtl2832u-driver",
+   "name": "RTL2832U driver",
+   "desc": "Martin Marinov's driver. A prerequisite for every RTL-SDR app on Android \u2014 install it before anything else in this category.",
+   "tier": 0,
+   "bundle": "radio",
+   "provider": "play",
+   "flags": [
+    "essential",
+    "exthw"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "play:marto.rtl_tcp_andro"
+  },
+  {
+   "id": "sdr-touch",
+   "name": "SDR Touch",
+   "desc": "RTL-SDR receiver with a waterfall and demodulation. Free tier is time-limited.",
+   "tier": 0,
+   "bundle": "radio",
+   "provider": "play",
+   "flags": [
+    "exthw"
+   ],
+   "license": "freemium",
+   "notes": "",
+   "upstream": "play:marto.androsdr2"
+  },
+  {
+   "id": "sdrpp",
+   "name": "SDR++",
+   "desc": "Modern multi-SDR receiver, actively developed, supports most hardware.",
+   "tier": 0,
+   "bundle": "radio",
+   "provider": "obtainium",
+   "flags": [
+    "exthw"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "AlexandreRouma/SDRPlusPlus"
+  },
+  {
+   "id": "amass",
+   "name": "amass",
+   "desc": "Subdomain enumeration and attack surface mapping.",
+   "tier": 0,
+   "bundle": "recon",
+   "provider": "go",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "github.com/owasp-amass/amass/v4/..."
+  },
+  {
+   "id": "google-earth",
+   "name": "Google Earth",
+   "desc": "Aerial and street-level site recon before a physical engagement.",
+   "tier": 0,
+   "bundle": "recon",
+   "provider": "play",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "play:com.google.earth"
+  },
+  {
+   "id": "organic-maps",
+   "name": "Organic Maps",
+   "desc": "Offline maps with no account and no tracking. For physical engagements where you need site layout with no signal.",
+   "tier": 0,
+   "bundle": "recon",
+   "provider": "obtainium",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:app.organicmaps"
+  },
+  {
+   "id": "osmand",
+   "name": "OsmAnd",
+   "desc": "Offline maps with heavier features \u2014 routing profiles, custom overlays, GPX recording.",
+   "tier": 0,
+   "bundle": "recon",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "freemium",
+   "notes": "",
+   "upstream": "f-droid:net.osmand.plus"
+  },
+  {
+   "id": "sherlock",
+   "name": "Sherlock",
+   "desc": "Username enumeration across hundreds of sites.",
+   "tier": 0,
+   "bundle": "recon",
+   "provider": "pip",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "shodan",
+   "name": "Shodan",
+   "desc": "Host and service intelligence lookup.",
+   "tier": 0,
+   "bundle": "recon",
+   "provider": "play",
+   "flags": [],
+   "license": "freemium",
+   "notes": "",
+   "upstream": "play:io.shodan.app"
+  },
+  {
+   "id": "subfinder",
+   "name": "subfinder",
+   "desc": "Fast passive subdomain discovery.",
+   "tier": 0,
+   "bundle": "recon",
+   "provider": "go",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "github.com/projectdiscovery/subfinder/v2/cmd/subfinder"
+  },
+  {
+   "id": "theharvester",
+   "name": "theHarvester",
+   "desc": "Email, subdomain and host gathering from public sources.",
+   "tier": 0,
+   "bundle": "recon",
+   "provider": "pip",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "attack",
+   "name": "MITRE ATT&CK for Mobile",
+   "desc": "Technique taxonomy, and the vocabulary clients expect findings mapped to.",
+   "tier": 0,
+   "bundle": "reference",
+   "provider": "web",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "gtfobins",
+   "name": "GTFOBins / LOLBAS",
+   "desc": "Living-off-the-land binaries for Unix and Windows.",
+   "tier": 0,
+   "bundle": "reference",
+   "provider": "web",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "hacktricks",
+   "name": "HackTricks",
+   "desc": "The single most useful practical reference. Mirror it offline \u2014 site work rarely has signal.",
+   "tier": 0,
+   "bundle": "reference",
+   "provider": "web",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "koreader",
+   "name": "KOReader",
+   "desc": "Document reader for the offline reference pack. Handles PDF, EPUB and HTML.",
+   "tier": 0,
+   "bundle": "reference",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:org.koreader.launcher.fdroid"
+  },
+  {
+   "id": "librera",
+   "name": "Librera Reader",
+   "desc": "The alternative reader, better on large PDFs.",
+   "tier": 0,
+   "bundle": "reference",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:com.foobnix.pro.pdf.reader"
+  },
+  {
+   "id": "nist-800-115",
+   "name": "NIST SP 800-115",
+   "desc": "Technical guide to information security testing. The methodology citation for a report.",
+   "tier": 0,
+   "bundle": "reference",
+   "provider": "web",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "owasp-mastg",
+   "name": "OWASP MASTG / MASVS",
+   "desc": "The mobile testing standard. Directly relevant to everything in the Mobile App Assessment category.",
+   "tier": 0,
+   "bundle": "reference",
+   "provider": "web",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "owasp-wstg",
+   "name": "OWASP WSTG / ASVS",
+   "desc": "The web testing standard, and the verification requirements to test against.",
+   "tier": 0,
+   "bundle": "reference",
+   "provider": "web",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "payloads",
+   "name": "PayloadsAllTheThings",
+   "desc": "Payload and technique reference by injection class.",
+   "tier": 0,
+   "bundle": "reference",
+   "provider": "web",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "searchsploit",
+   "name": "Exploit-DB / searchsploit",
+   "desc": "Offline exploit database with local search.",
+   "tier": 0,
+   "bundle": "reference",
+   "provider": "git",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "gitlab:exploit-database/exploitdb"
+  },
+  {
+   "id": "seclists",
+   "name": "SecLists",
+   "desc": "Wordlists. Mirror them locally \u2014 you will not want to download these on a client site.",
+   "tier": 0,
+   "bundle": "reference",
+   "provider": "git",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "danielmiessler/SecLists"
+  },
+  {
+   "id": "amaze",
+   "name": "Amaze File Manager",
+   "desc": "Open source file manager, root-aware. The alternative to Material Files.",
+   "tier": 0,
+   "bundle": "remote",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:com.amaze.filemanager"
+  },
+  {
+   "id": "kde-connect",
+   "name": "KDE Connect",
+   "desc": "Shared clipboard, file push and remote input between the phone and your laptop.",
+   "tier": 0,
+   "bundle": "remote",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:org.kde.kdeconnect_tp"
+  },
+  {
+   "id": "localsend",
+   "name": "LocalSend",
+   "desc": "AirDrop-equivalent over the local network, cross platform, open source.",
+   "tier": 0,
+   "bundle": "remote",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "localsend/localsend"
+  },
+  {
+   "id": "material-files",
+   "name": "Material Files",
+   "desc": "Open source file manager with SMB, SFTP and FTP built in. Actively maintained.",
+   "tier": 0,
+   "bundle": "remote",
+   "provider": "obtainium",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:me.zhanghai.android.files"
+  },
+  {
+   "id": "ms-rdp",
+   "name": "Microsoft Remote Desktop",
+   "desc": "RDP into Windows targets and jump boxes.",
+   "tier": 0,
+   "bundle": "remote",
+   "provider": "play",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "play:com.microsoft.rdc.androidx"
+  },
+  {
+   "id": "openssh",
+   "name": "OpenSSH",
+   "desc": "sshd on the phone as well as ssh from it. The phone becomes something you can reach.",
+   "tier": 0,
+   "bundle": "remote",
+   "provider": "pkg",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "Must listen above port 1024 without root. 8022 is the Termux convention.",
+   "upstream": ""
+  },
+  {
+   "id": "realvnc",
+   "name": "RealVNC Viewer",
+   "desc": "Required for NetHunter KeX, and generally the most reliable VNC client on Android.",
+   "tier": 0,
+   "bundle": "remote",
+   "provider": "play",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "play:com.realvnc.viewer.android"
+  },
+  {
+   "id": "rsync",
+   "name": "rsync",
+   "desc": "Move artifacts around properly, resumable, over SSH.",
+   "tier": 0,
+   "bundle": "remote",
+   "provider": "pkg",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "rustdesk",
+   "name": "RustDesk",
+   "desc": "Open source remote desktop with a self-hostable relay. Fits a homelab better than any commercial option.",
+   "tier": 0,
+   "bundle": "remote",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "rustdesk/rustdesk"
+  },
+  {
+   "id": "syncthing",
+   "name": "Syncthing-Fork",
+   "desc": "Continuous peer-to-peer sync with no cloud. This is how engagement artifacts get off the phone and onto your homelab without touching a third party.",
+   "tier": 0,
+   "bundle": "remote",
+   "provider": "obtainium",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "The original com.nutomic.syncthingandroid was discontinued and pulled from F-Droid. This fork is the maintained one.",
+   "upstream": "f-droid:com.github.catfriend1.syncthingfork"
+  },
+  {
+   "id": "exiftool",
+   "name": "exiftool",
+   "desc": "Read, strip and verify metadata before anything goes into a report.",
+   "tier": 0,
+   "bundle": "reporting",
+   "provider": "pkg",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "joplin",
+   "name": "Joplin",
+   "desc": "Open source notes with self-hostable sync. The alternative if you want the whole stack open.",
+   "tier": 0,
+   "bundle": "reporting",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:net.cozic.joplin"
+  },
+  {
+   "id": "markor",
+   "name": "Markor",
+   "desc": "Lightweight markdown editor over local files. No database, no sync, no lock-in.",
+   "tier": 0,
+   "bundle": "reporting",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:net.gsantner.markor"
+  },
+  {
+   "id": "nextcloud",
+   "name": "Nextcloud",
+   "desc": "Self-hosted artifact storage, if you would rather have a server than peer sync.",
+   "tier": 0,
+   "bundle": "reporting",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:com.nextcloud.client"
+  },
+  {
+   "id": "obsidian",
+   "name": "Obsidian",
+   "desc": "Markdown notes over a plain folder. Combined with Syncthing this is a complete engagement notes pipeline with no vendor in it.",
+   "tier": 0,
+   "bundle": "reporting",
+   "provider": "play",
+   "flags": [
+    "essential"
+   ],
+   "license": "freemium",
+   "notes": "",
+   "upstream": "play:md.obsidian"
+  },
+  {
+   "id": "open-camera",
+   "name": "Open Camera",
+   "desc": "Manual camera with GPS stamping and EXIF control. For physical engagement evidence that has to hold up later.",
+   "tier": 0,
+   "bundle": "reporting",
+   "provider": "obtainium",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:net.sourceforge.opencamera"
+  },
+  {
+   "id": "screen-recorder",
+   "name": "ADV Screen Recorder",
+   "desc": "Screen capture of exploitation steps, for the report and for proving it worked.",
+   "tier": 0,
+   "bundle": "reporting",
+   "provider": "play",
+   "flags": [],
+   "license": "freemium",
+   "notes": "",
+   "upstream": "play:com.blogspot.byterevapps.lollipopscreenrecorder"
+  },
+  {
+   "id": "timestamp-camera",
+   "name": "Timestamp Camera",
+   "desc": "Burns date, time and coordinates into the image itself rather than only the metadata.",
+   "tier": 0,
+   "bundle": "reporting",
+   "provider": "play",
+   "flags": [],
+   "license": "freemium",
+   "notes": "",
+   "upstream": "play:com.jeyluta.timestampcamerafree"
+  },
+  {
+   "id": "caddy",
+   "name": "Caddy",
+   "desc": "A real web server with automatic HTTPS, from the phone.",
+   "tier": 0,
+   "bundle": "server",
+   "provider": "pkg",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "cowrie",
+   "name": "Cowrie",
+   "desc": "SSH and Telnet honeypot that records the whole session. Python, so it runs in Termux.",
+   "tier": 0,
+   "bundle": "server",
+   "provider": "git",
+   "flags": [],
+   "license": "free",
+   "notes": "Remap ports above 1024 at Tier 0, or bind the real ports at Tier 2.",
+   "upstream": "cowrie/cowrie"
+  },
+  {
+   "id": "impacket",
+   "name": "impacket",
+   "desc": "The Windows protocol toolkit. Most of it works; anything binding 445 needs root.",
+   "tier": 0,
+   "bundle": "server",
+   "provider": "pip",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "metasploit",
+   "name": "Metasploit Framework",
+   "desc": "Installs and runs in Termux. Heavy, and listeners are limited to unprivileged ports without root.",
+   "tier": 0,
+   "bundle": "server",
+   "provider": "git",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "rapid7/metasploit-framework"
+  },
+  {
+   "id": "nginx",
+   "name": "nginx",
+   "desc": "The other real web server, when you want the config you already know.",
+   "tier": 0,
+   "bundle": "server",
+   "provider": "pkg",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "ntfy-server",
+   "name": "ntfy",
+   "desc": "Self-hosted push notifications. This is what a honeypot or a canary token fires into.",
+   "tier": 0,
+   "bundle": "server",
+   "provider": "go",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "heckel.io/ntfy/v2"
+  },
+  {
+   "id": "opencanary",
+   "name": "OpenCanary",
+   "desc": "Multi-protocol honeypot daemon. Pairs naturally with a canary token deployment.",
+   "tier": 0,
+   "bundle": "server",
+   "provider": "pip",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "python-http",
+   "name": "python -m http.server",
+   "desc": "Payload hosting and exfil endpoint in one command. Works unprivileged as long as the port is above 1024.",
+   "tier": 0,
+   "bundle": "server",
+   "provider": "pkg",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "smoke-pkg",
+   "name": "nmap",
+   "desc": "Termux apt package. Proves the pkg path and gives you something obviously testable.",
+   "tier": 0,
+   "bundle": "smoke",
+   "provider": "pkg",
+   "flags": [],
+   "license": "free",
+   "notes": "Verify with: nmap -sT -p 80,443 scanme.nmap.org",
+   "upstream": "termux:nmap"
+  },
+  {
+   "id": "smoke-pip",
+   "name": "httpie",
+   "desc": "Python package. Proves pip works and that the python toolchain step fires first.",
+   "tier": 0,
+   "bundle": "smoke",
+   "provider": "pip",
+   "flags": [],
+   "license": "free",
+   "notes": "Verify with: http --version",
+   "upstream": "pypi:httpie"
+  },
+  {
+   "id": "smoke-go",
+   "name": "ffuf",
+   "desc": "Go module. Proves the go toolchain installs and builds. Slowest step by far.",
+   "tier": 0,
+   "bundle": "smoke",
+   "provider": "go",
+   "flags": [],
+   "license": "free",
+   "notes": "Compiles on device \u2014 allow several minutes. Verify with: ~/go/bin/ffuf -V",
+   "upstream": "ffuf/ffuf"
+  },
+  {
+   "id": "smoke-git",
+   "name": "PayloadsAllTheThings",
+   "desc": "Shallow clone. Proves the git path and the WTF_SRC directory. Small enough to be quick.",
+   "tier": 0,
+   "bundle": "smoke",
+   "provider": "git",
+   "flags": [],
+   "license": "free",
+   "notes": "Lands in ~/wtf/src. Verify with: ls ~/wtf/src/PayloadsAllTheThings",
+   "upstream": "swisskyrepo/PayloadsAllTheThings"
+  },
+  {
+   "id": "hacker-tracker",
+   "name": "Hacker Tracker",
+   "desc": "DEF CON conference companion. Not a tool, but it is always on the phone anyway.",
+   "tier": 0,
+   "bundle": "socialeng",
+   "provider": "play",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "play:com.shortstack.hackertracker"
+  },
+  {
+   "id": "pentest-reference",
+   "name": "Pentest Reference",
+   "desc": "Offline command and methodology reference. First-party androidWTF tooling.",
+   "tier": 0,
+   "bundle": "socialeng",
+   "provider": "androidwtf",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "spoofcard",
+   "name": "SpoofCard",
+   "desc": "Caller ID spoofing. The US Truth in Caller ID Act makes spoofing with intent to defraud or harm illegal, and the TRACED Act raised the penalties.",
+   "tier": 0,
+   "bundle": "socialeng",
+   "provider": "play",
+   "flags": [
+    "legal"
+   ],
+   "license": "paid",
+   "notes": "Requires written client authorisation naming caller ID spoofing as an in-scope technique. Most consumer spoofing services have also shut down or restricted signups.",
+   "upstream": "play:com.spoofcard.app"
+  },
+  {
+   "id": "trust-me-bro",
+   "name": "Trust Me Bro",
+   "desc": "Pretext soundboard. First-party androidWTF tooling.",
+   "tier": 0,
+   "bundle": "socialeng",
+   "provider": "androidwtf",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "feroxbuster",
+   "name": "feroxbuster",
+   "desc": "Recursive content discovery in Rust.",
+   "tier": 0,
+   "bundle": "web",
+   "provider": "pkg",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "ffuf",
+   "name": "ffuf",
+   "desc": "Content and parameter fuzzing. Runs at full speed in Termux.",
+   "tier": 0,
+   "bundle": "web",
+   "provider": "go",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "github.com/ffuf/ffuf/v2"
+  },
+  {
+   "id": "firefox-nightly",
+   "name": "Firefox Nightly",
+   "desc": "The only mainstream mobile browser that runs real desktop extensions. Wappalyzer, Cookie Editor, FoxyProxy and friends all work.",
+   "tier": 0,
+   "bundle": "web",
+   "provider": "play",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "Custom add-on collections need a one-time setup in the debug menu.",
+   "upstream": "play:org.mozilla.fenix"
+  },
+  {
+   "id": "hermit",
+   "name": "Hermit",
+   "desc": "Wraps any web app as a standalone lite app. Good for PortSwigger Academy, your own dashboards, or anything you want off the browser tab pile.",
+   "tier": 0,
+   "bundle": "web",
+   "provider": "play",
+   "flags": [],
+   "license": "freemium",
+   "notes": "",
+   "upstream": "play:com.chimbori.hermitcrab"
+  },
+  {
+   "id": "httpx-tool",
+   "name": "httpx",
+   "desc": "Fast HTTP probing and fingerprinting across a host list.",
+   "tier": 0,
+   "bundle": "web",
+   "provider": "go",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "github.com/projectdiscovery/httpx/cmd/httpx"
+  },
+  {
+   "id": "kiwi-browser",
+   "name": "Kiwi Browser",
+   "desc": "Chromium with Chrome Web Store extension support. Development has been intermittent \u2014 treat Firefox Nightly as the primary.",
+   "tier": 0,
+   "bundle": "web",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "kiwibrowser/src.next"
+  },
+  {
+   "id": "mitmproxy",
+   "name": "mitmproxy",
+   "desc": "Scriptable intercepting proxy from the shell, for when Reqable's UI is not enough.",
+   "tier": 0,
+   "bundle": "web",
+   "provider": "pip",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "nikto",
+   "name": "nikto",
+   "desc": "Old, noisy, still finds things.",
+   "tier": 0,
+   "bundle": "web",
+   "provider": "git",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "sullo/nikto"
+  },
+  {
+   "id": "nuclei",
+   "name": "nuclei",
+   "desc": "Template-driven vulnerability scanning. Works well on a phone.",
+   "tier": 0,
+   "bundle": "web",
+   "provider": "go",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "github.com/projectdiscovery/nuclei/v3/cmd/nuclei"
+  },
+  {
+   "id": "sqlmap",
+   "name": "sqlmap",
+   "desc": "SQL injection automation. Slow on a phone but entirely functional.",
+   "tier": 0,
+   "bundle": "web",
+   "provider": "pip",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "urlcheck",
+   "name": "URLCheck",
+   "desc": "Inspect, unshorten and strip tracking from a URL before it opens. Set it as the default handler.",
+   "tier": 0,
+   "bundle": "web",
+   "provider": "obtainium",
+   "flags": [],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:com.trianguloy.urlchecker"
+  },
+  {
+   "id": "burp-ca",
+   "name": "Burp / system CA install",
+   "desc": "Not an app. On Android 7+ user-added CAs are not trusted by apps, so an intercepting proxy sees nothing until the certificate lands in the system store.",
+   "tier": 2,
+   "bundle": "web",
+   "provider": "builtin",
+   "flags": [],
+   "license": "free",
+   "notes": "Magisk modules like AlwaysTrustUserCerts handle this. At Tier 0 you are limited to apps that opt into user CAs.",
+   "upstream": ""
+  },
+  {
+   "id": "wifi-warden",
+   "name": "WiFi Warden",
+   "desc": "WPS analysis and network detail. Legally sensitive \u2014 connecting to a network you do not own is a CFAA problem regardless of how easy the app makes it.",
+   "tier": 0,
+   "bundle": "wireless",
+   "provider": "play",
+   "flags": [
+    "legal"
+   ],
+   "license": "freemium",
+   "notes": "Authorised engagements only, with the technique named in scope.",
+   "upstream": "play:com.xti.wifiwarden"
+  },
+  {
+   "id": "wigle",
+   "name": "WiGLE WiFi Wardriving",
+   "desc": "Logs every network you drive past with GPS, and exports CSV. Works on a completely stock phone.",
+   "tier": 0,
+   "bundle": "wireless",
+   "provider": "obtainium",
+   "flags": [
+    "essential"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": "f-droid:net.wigle.wigleandroid"
+  },
+  {
+   "id": "aircrack-ng",
+   "name": "aircrack-ng suite",
+   "desc": "The classic wireless attack suite. Everything in it needs monitor mode.",
+   "tier": 3,
+   "bundle": "wireless",
+   "provider": "nethunter",
+   "flags": [
+    "exthw"
+   ],
+   "license": "free",
+   "notes": "Internal Android chipsets do not do monitor mode. You need a NetHunter kernel, and in practice an external adapter over OTG.",
+   "upstream": ""
+  },
+  {
+   "id": "hcxdumptool",
+   "name": "hcxdumptool",
+   "desc": "PMKID and handshake capture, the modern path to WPA2 material.",
+   "tier": 3,
+   "bundle": "wireless",
+   "provider": "nethunter",
+   "flags": [
+    "exthw"
+   ],
+   "license": "free",
+   "notes": "Capture on the phone, crack on your homelab. There is no usable GPU path on Android.",
+   "upstream": ""
+  },
+  {
+   "id": "kismet",
+   "name": "Kismet",
+   "desc": "Wireless detector, sniffer and IDS. Wants monitor mode on a real interface.",
+   "tier": 3,
+   "bundle": "wireless",
+   "provider": "nethunter",
+   "flags": [
+    "exthw"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  },
+  {
+   "id": "wifite2",
+   "name": "Wifite2",
+   "desc": "Automation wrapper over the aircrack suite. Same monitor mode requirement.",
+   "tier": 3,
+   "bundle": "wireless",
+   "provider": "nethunter",
+   "flags": [
+    "exthw"
+   ],
+   "license": "free",
+   "notes": "",
+   "upstream": ""
+  }
+ ]
+}
