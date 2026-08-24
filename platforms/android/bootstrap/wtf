@@ -18,6 +18,30 @@ set -euo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Termux's RUN_COMMAND intent does not guarantee PATH, so coreutils (fold, cut,
+# tr, grep) can be missing from an otherwise healthy install. Put $PREFIX/bin
+# back on PATH rather than resolving each binary by hand.
+if [ -n "${PREFIX:-}" ] && [ -d "$PREFIX/bin" ]; then
+	case ":$PATH:" in *":$PREFIX/bin:"*) ;; *) PATH="$PREFIX/bin:$PATH" ;; esac
+elif [ -d /data/data/com.termux/files/usr/bin ]; then
+	case ":$PATH:" in *":/data/data/com.termux/files/usr/bin:"*) ;;
+		*) PATH="/data/data/com.termux/files/usr/bin:$PATH" ;; esac
+fi
+export PATH
+
+
+# Resolve bash explicitly. Under Termux's RUN_COMMAND intent the PATH is not
+# guaranteed, so a bare `bash` can fail with "not found" on a system that
+# obviously has bash. $PREFIX is set inside Termux; fall back for dev machines.
+if [ -n "${PREFIX:-}" ] && [ -x "$PREFIX/bin/bash" ]; then
+	BASH="$PREFIX/bin/bash"
+elif [ -x /data/data/com.termux/files/usr/bin/bash ]; then
+	BASH=/data/data/com.termux/files/usr/bin/bash
+else
+	BASH="$(command -v bash 2>/dev/null || echo /bin/bash)"
+fi
+
+
 BOLD=$'\033[1m'; YELLOW=$'\033[33m'; RESET=$'\033[0m'
 warn() { printf '%s%s%s\n' "$YELLOW" "$*" "$RESET"; }
 
@@ -26,7 +50,7 @@ case "${1:-help}" in
 	doctor)
 		# Explicit bash: the repo copy carries a portable /usr/bin/env shebang,
 		# which does not exist on Android.
-		exec bash "$HERE/preflight.sh"
+		exec "$BASH" "$HERE/preflight.sh"
 		;;
 esac
 
@@ -35,7 +59,7 @@ if ! command -v python3 >/dev/null 2>&1; then
 	# install that cannot succeed, then dumping apt's signature errors on the
 	# user, makes a Termux problem look like an androidWTF problem. This was
 	# the actual first-run experience on an old phone.
-	REPO="$(bash -c 'source "'"$HERE"'/preflight.sh"; probe; echo "$WTF_REPO"' 2>/dev/null | tail -1)"
+	REPO="$("$BASH" -c 'source "'"$HERE"'/preflight.sh"; probe; echo "$WTF_REPO"' 2>/dev/null | tail -1)"
 	if [ "$REPO" = stale ]; then
 		warn "Python is needed for everything except 'wtf doctor' — but Termux's"
 		warn "package repository is not working, so installing it would fail."

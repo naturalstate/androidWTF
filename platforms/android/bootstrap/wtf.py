@@ -22,6 +22,16 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+
+
+def _bash():
+    """Termux's RUN_COMMAND does not guarantee PATH, so resolve bash explicitly."""
+    prefix = os.environ.get("PREFIX", "")
+    for c in (f"{prefix}/bin/bash" if prefix else None,
+              "/data/data/com.termux/files/usr/bin/bash"):
+        if c and os.access(c, os.X_OK):
+            return c
+    return shutil.which("bash") or "/bin/bash"
 ROOT = HERE.parents[2]
 BUNDLES = ROOT / "catalog" / "bundles"
 PROFILES = ROOT / "profiles"
@@ -211,7 +221,7 @@ def repo_health():
     if not pre.exists():
         return "unknown"
     try:
-        out = subprocess.run(["bash", "-c", f'source "{pre}"; probe; echo "$WTF_REPO"'],
+        out = subprocess.run([_bash(), "-c", f'source "{pre}"; probe; echo "$WTF_REPO"'],
                              capture_output=True, text=True, timeout=30)
         v = out.stdout.strip().splitlines()[-1] if out.stdout.strip() else ""
         return v or "unknown"
@@ -226,7 +236,7 @@ def device_tier():
         return None, "preflight.sh missing"
     try:
         out = subprocess.run(
-            ["bash", "-c", f'source "{pre}"; probe; echo "$WTF_SDK:$WTF_TIER"'],
+            [_bash(), "-c", f'source "{pre}"; probe; echo "$WTF_SDK:$WTF_TIER"'],
             capture_output=True, text=True, timeout=30)
         line = out.stdout.strip().splitlines()[-1] if out.stdout.strip() else ""
         sdk, _, tier = line.partition(":")
@@ -506,7 +516,7 @@ def probe_all():
     script = f'source "{pre}"; probe; ' + "; ".join(f'echo "{k}=${k}"' for k in keys)
     out = {}
     try:
-        r = subprocess.run(["bash", "-c", script], capture_output=True, text=True, timeout=30)
+        r = subprocess.run([_bash(), "-c", script], capture_output=True, text=True, timeout=30)
         for line in r.stdout.splitlines():
             k, _, v = line.partition("=")
             if k in keys:

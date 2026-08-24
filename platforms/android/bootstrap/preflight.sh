@@ -54,6 +54,17 @@ wrap() {
 	done
 }
 
+# Termux's RUN_COMMAND intent does not guarantee PATH, so coreutils (fold, cut,
+# tr, grep) can be missing from an otherwise healthy install. Put $PREFIX/bin
+# back on PATH rather than resolving each binary by hand.
+if [ -n "${PREFIX:-}" ] && [ -d "$PREFIX/bin" ]; then
+	case ":$PATH:" in *":$PREFIX/bin:"*) ;; *) PATH="$PREFIX/bin:$PATH" ;; esac
+elif [ -d /data/data/com.termux/files/usr/bin ]; then
+	case ":$PATH:" in *":/data/data/com.termux/files/usr/bin:"*) ;;
+		*) PATH="/data/data/com.termux/files/usr/bin:$PATH" ;; esac
+fi
+export PATH
+
 GETPROP=/system/bin/getprop
 prop() { [ -x "$GETPROP" ] && "$GETPROP" "$1" 2>/dev/null || printf ''; }
 

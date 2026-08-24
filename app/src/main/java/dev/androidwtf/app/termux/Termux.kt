@@ -37,8 +37,14 @@ object Termux {
     private const val EXTRA_BACKGROUND = "com.termux.RUN_COMMAND_BACKGROUND"
     private const val EXTRA_SESSION_ACTION = "com.termux.RUN_COMMAND_SESSION_ACTION"
 
-    /** Where install.sh puts the engine. */
-    const val WTF = "/data/data/com.termux/files/home/.wtf/repo/platforms/android/bootstrap/wtf"
+    private const val PREFIX = "/data/data/com.termux/files/usr"
+    private const val HOME = "/data/data/com.termux/files/home"
+
+    /** Termux's bash. Always the command path — see runWtf. */
+    private const val BASH = "$PREFIX/bin/bash"
+
+    /** The engine, where install.sh clones it. */
+    const val WTF = "$HOME/.wtf/repo/platforms/android/bootstrap/wtf"
 
     val bootstrapCommand =
         "curl -fsSL https://raw.githubusercontent.com/naturalstate/androidWTF/" +
@@ -71,9 +77,16 @@ object Termux {
     fun runWtf(ctx: Context, args: List<String>) {
         val intent = Intent(ACTION).apply {
             setClassName(PACKAGE, SERVICE)
-            putExtra(EXTRA_COMMAND_PATH, WTF)
-            putExtra(EXTRA_ARGUMENTS, args.toTypedArray())
-            putExtra(EXTRA_WORKDIR, "/data/data/com.termux/files/home")
+            // Execute bash and pass the script as its first argument, rather than
+            // executing the script directly. The repo copy carries a portable
+            // "#!/usr/bin/env bash" shebang and Android has no /usr, so exec'ing
+            // it gives ENOENT about the *interpreter* — which surfaces as a
+            // baffling "No such file or directory" naming the script that plainly
+            // does exist. Going through bash sidesteps the shebang entirely and
+            // works whether or not install.sh generated its $PREFIX/bin launcher.
+            putExtra(EXTRA_COMMAND_PATH, BASH)
+            putExtra(EXTRA_ARGUMENTS, (listOf(WTF) + args).toTypedArray())
+            putExtra(EXTRA_WORKDIR, HOME)
             putExtra(EXTRA_BACKGROUND, false)
             putExtra(EXTRA_SESSION_ACTION, "0")
         }
