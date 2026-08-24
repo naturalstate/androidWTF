@@ -3,6 +3,7 @@ description: >
   Everything that works on a completely untouched device. No bootloader unlock,
   no root, no warranty voided, and Play Integrity stays intact. Roughly nine
   tenths of the catalogue.
+order: 2
 requires_tier: 0
 reversible: true
 

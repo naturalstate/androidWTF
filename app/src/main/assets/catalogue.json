@@ -114,39 +114,46 @@
  ],
  "profiles": [
   {
-   "name": "android-minimal",
-   "description": "Termux and a working shell, nothing else. The floor everything is built on, and a sane thing to put on a phone you have not decided about yet.",
-   "requiresTier": 0
-  },
-  {
-   "name": "android-nethunter",
-   "description": "A supported device running a NetHunter kernel. Monitor mode, packet injection, HID attacks and external adapter drivers. The tier that can brick a phone.",
-   "requiresTier": 3
-  },
-  {
-   "name": "android-rf",
-   "description": "A focused radio and hardware bench: SDR, GNSS, LoRa, NFC, RFID, BLE and the OTG serial console. Runs on a stock device \u2014 most of this needs no privileges, only an adapter.",
-   "requiresTier": 0
-  },
-  {
-   "name": "android-rooted",
-   "description": "Magisk or KernelSU. Unlocks raw sockets, privileged ports, Frida, real tcpdump and LSPosed. This is also where Play Integrity stops working \u2014 use a dedicated device.",
-   "requiresTier": 2
-  },
-  {
-   "name": "android-shizuku",
-   "description": "Stock plus Shizuku, paired over wireless debugging. ADB-level privileges with no root, no PC on Android 11+, and nothing irreversible. If you do exactly one thing past stock, do this.",
-   "requiresTier": 1
-  },
-  {
    "name": "android-smoke",
    "description": "Smoke test. Installs four small tools, one per mechanism \u2014 an apt package, a pip package, a Go module and a shallow clone \u2014 so one run tells you whether a fresh install actually works. Use this before trusting any bigger profile.",
-   "requiresTier": 0
+   "requiresTier": 0,
+   "order": 0
+  },
+  {
+   "name": "android-minimal",
+   "description": "Termux and a working shell, nothing else. The floor everything is built on, and a sane thing to put on a phone you have not decided about yet.",
+   "requiresTier": 0,
+   "order": 1
   },
   {
    "name": "android-stock",
    "description": "Everything that works on a completely untouched device. No bootloader unlock, no root, no warranty voided, and Play Integrity stays intact. Roughly nine tenths of the catalogue.",
-   "requiresTier": 0
+   "requiresTier": 0,
+   "order": 2
+  },
+  {
+   "name": "android-rf",
+   "description": "A focused radio and hardware bench: SDR, GNSS, LoRa, NFC, RFID, BLE and the OTG serial console. Runs on a stock device \u2014 most of this needs no privileges, only an adapter.",
+   "requiresTier": 0,
+   "order": 3
+  },
+  {
+   "name": "android-shizuku",
+   "description": "Stock plus Shizuku, paired over wireless debugging. ADB-level privileges with no root, no PC on Android 11+, and nothing irreversible. If you do exactly one thing past stock, do this.",
+   "requiresTier": 1,
+   "order": 4
+  },
+  {
+   "name": "android-rooted",
+   "description": "Magisk or KernelSU. Unlocks raw sockets, privileged ports, Frida, real tcpdump and LSPosed. This is also where Play Integrity stops working \u2014 use a dedicated device.",
+   "requiresTier": 2,
+   "order": 5
+  },
+  {
+   "name": "android-nethunter",
+   "description": "A supported device running a NetHunter kernel. Monitor mode, packet injection, HID attacks and external adapter drivers. The tier that can brick a phone.",
+   "requiresTier": 3,
+   "order": 6
   }
  ],
  "tools": [

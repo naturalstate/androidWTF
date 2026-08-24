@@ -3,6 +3,7 @@ description: >
   A focused radio and hardware bench: SDR, GNSS, LoRa, NFC, RFID, BLE and the
   OTG serial console. Runs on a stock device — most of this needs no privileges,
   only an adapter.
+order: 3
 requires_tier: 0
 reversible: true
 

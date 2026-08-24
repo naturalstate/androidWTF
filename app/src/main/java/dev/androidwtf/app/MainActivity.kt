@@ -130,7 +130,15 @@ private fun InstallBar(
             Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text("$count selected", color = Ink, style = MaterialTheme.typography.bodyMedium)
+            Column {
+                Text("$count selected", color = Ink, style = MaterialTheme.typography.bodyMedium)
+                // A greyed-out button with no reason beside it is just confusing.
+                if (!enabled) Text(
+                    "Termux not ready",
+                    color = Tier2,
+                    style = MaterialTheme.typography.labelSmall,
+                )
+            }
             Spacer(Modifier.weight(1f))
             TextButton(onClick = onClear) { Text("Clear", color = Muted) }
             OutlinedButton(onClick = onPreview, enabled = enabled, shape = RoundedCornerShape(12.dp)) {

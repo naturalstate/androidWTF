@@ -3,6 +3,7 @@ description: >
   Stock plus Shizuku, paired over wireless debugging. ADB-level privileges with
   no root, no PC on Android 11+, and nothing irreversible. If you do exactly one
   thing past stock, do this.
+order: 4
 requires_tier: 1
 reversible: true
 

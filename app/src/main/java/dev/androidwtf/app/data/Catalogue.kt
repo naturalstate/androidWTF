@@ -34,7 +34,12 @@ data class Tool(
 data class Bundle(val name: String, val description: String, val count: Int)
 
 @Serializable
-data class Profile(val name: String, val description: String, val requiresTier: Int)
+data class Profile(
+    val name: String,
+    val description: String,
+    val requiresTier: Int,
+    val order: Int = 99,
+)
 
 @Serializable
 data class Catalogue(

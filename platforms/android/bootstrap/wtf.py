@@ -556,10 +556,15 @@ def cmd_catalogue_json(args):
         "version": VERSION,
         "bundles": [{"name": n, "description": b["description"], "count": len(b["tools"])}
                     for n, b in bundles.items() if not only or n == only],
-        "profiles": [{"name": f.stem,
-                      "description": load_yaml(f).get("description", ""),
-                      "requiresTier": load_yaml(f).get("requires_tier", 0)}
-                     for f in sorted(PROFILES.glob("*.yaml"))],
+        # Ordered by the profile's own `order:`, not alphabetically — smoke leads
+        # because it is the one to run first on a device you do not trust yet.
+        "profiles": sorted(
+            [{"name": f.stem,
+              "description": load_yaml(f).get("description", ""),
+              "requiresTier": load_yaml(f).get("requires_tier", 0),
+              "order": load_yaml(f).get("order", 99)}
+             for f in PROFILES.glob("*.yaml")],
+            key=lambda p: (p["order"], p["name"])),
         "tools": tools,
     })
 

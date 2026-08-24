@@ -3,6 +3,7 @@ description: >
   Magisk or KernelSU. Unlocks raw sockets, privileged ports, Frida, real tcpdump
   and LSPosed. This is also where Play Integrity stops working — use a dedicated
   device.
+order: 5
 requires_tier: 2
 reversible: false
 breaks_play_integrity: true

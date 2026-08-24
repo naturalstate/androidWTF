@@ -2,6 +2,7 @@ profile: android-nethunter
 description: >
   A supported device running a NetHunter kernel. Monitor mode, packet injection,
   HID attacks and external adapter drivers. The tier that can brick a phone.
+order: 6
 requires_tier: 3
 reversible: false
 breaks_play_integrity: true
