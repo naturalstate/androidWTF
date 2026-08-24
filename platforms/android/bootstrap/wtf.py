@@ -14,6 +14,7 @@ guessing.
 
 import os
 import re
+import json
 import shutil
 import textwrap
 import subprocess
@@ -333,10 +334,35 @@ def cmd_catalogue(args):
         print()
 
 
+def tools_by_id(bundles, ids):
+    index = {t["id"]: (n, t) for n, b in bundles.items() for t in b["tools"]}
+    missing = [i for i in ids if i not in index]
+    if missing:
+        sys.exit(f"unknown tool id(s): {', '.join(missing)}")
+    return [index[i] for i in ids]
+
+
 def cmd_install(args):
-    profile = load_profile(need(args, "--profile"))
     dry = "--dry-run" in args
     bundles = load_bundles()
+
+    # --tools is the GUI path: an arbitrary selection rather than a whole profile.
+    picked_ids = opt(args, "--tools")
+    if picked_ids:
+        ids = [i.strip() for i in picked_ids.split(",") if i.strip()]
+        picked = tools_by_id(bundles, ids)
+        tier, src = device_tier()
+        if tier is None and not dry:
+            sys.exit("Could not determine the device tier. Run 'wtf doctor', or pass --dry-run.")
+        over = [t["id"] for _, t in picked if tier is not None and t["tier"] > tier]
+        if over:
+            warn(f"{len(over)} selected tools need a higher tier than this device "
+                 f"reports and were dropped: {', '.join(over)}")
+            picked = [(b, t) for b, t in picked if t["tier"] <= tier]
+        return run_plan(picked, [], f"selection ({len(picked)} tools)",
+                        tier if tier is not None else 0, dry, as_json="--json" in args)
+
+    profile = load_profile(need(args, "--profile"))
     tier, src = device_tier()
     if tier is None:
         warn(f"Could not determine the device tier ({src}).")
@@ -350,40 +376,51 @@ def cmd_install(args):
         dim("Installing the subset this device can actually run.")
 
     picked, skipped = resolve(profile, bundles, tier)
-    plan = build_plan(picked)
+    return run_plan(picked, skipped, profile["profile"], tier, dry, as_json="--json" in args)
 
-    W = width()
-    step(f"{profile['profile']}")
-    print(f"{GREY}Tier {tier} · {len(picked)} tools · {len(plan)} steps{RESET}")
+
+# Both entry points - a whole profile, and a GUI selection of ids - share this,
+# so the two cannot drift in what they actually execute.
+def run_plan(picked, skipped, title, tier, dry, as_json=False):
+    plan = build_plan(picked)
+    manual = [(b, t) for b, t in picked
+              if t["install"][0]["provider"] in ("play", "nethunter", "androidwtf", "web", "builtin")]
+
+    if as_json:
+        emit({
+            "title": title, "tier": tier, "dryRun": dry,
+            "tools": [t["id"] for _, t in picked],
+            "skipped": [t["id"] for _, t in skipped],
+            "steps": [{"kind": k, "command": c, "note": w} for k, c, w in plan],
+            "manual": [{"id": t["id"], "name": t["name"],
+                        "provider": t["install"][0]["provider"]} for _, t in manual],
+            "repo": repo_health(),
+        })
+        return 0
+
+    step(title)
+    print(f"{GREY}Tier {tier} \u00b7 {len(picked)} tools \u00b7 {len(plan)} steps{RESET}")
     print()
     for n, (kind, cmd, who) in enumerate(plan, 1):
-        label = f"{CYAN}{kind}{RESET}"
         note = f"  {GREY}{who}{RESET}" if who else ""
-        print(f"  {GREY}{n:>2}{RESET} {label}{note}")
+        print(f"  {GREY}{n:>2}{RESET} {CYAN}{kind}{RESET}{note}")
         # Printed raw, never textwrap'd. The terminal soft-wraps long commands
         # without inserting newlines, so they stay copy-pasteable; textwrap would
         # break a URL across two real lines and silently corrupt it.
         print(f"     {cmd}")
         print()
     if skipped:
-        print()
         dim(f"{len(skipped)} tools left out: they need a tier above {tier}.")
-
-    manual = [(b, t) for b, t in picked
-              if t["install"][0]["provider"] in ("play", "nethunter", "androidwtf", "web", "builtin")]
     if manual:
         print()
         step(f"{len(manual)} cannot be scripted")
         dim("Play Store, NetHunter Store, first-party apps and documented workflows.")
-        dim("Run 'wtf list' for the full set, or use the site's Manual tab.")
 
     if dry:
         print()
         dim("--dry-run: nothing was executed.")
-        return
+        return 0
 
-    # Every pkg step, and therefore the pip and go toolchain steps behind them,
-    # depends on a working repo. Failing twenty times in a row teaches nothing.
     if any(k == "pkg" for k, _, _ in plan) and repo_health() == "stale":
         print()
         warn("Termux's package repository is not usable, so every step here would fail.")
@@ -408,8 +445,9 @@ def cmd_install(args):
         warn(f"{len(failed)} steps failed:")
         for f in failed:
             dim(f"    {f}")
-    else:
-        print(f"{BOLD}{GREEN}\u2713 all steps completed{RESET}")
+        return 1
+    print(f"{BOLD}{GREEN}\u2713 all steps completed{RESET}")
+    return 0
 
 
 def build_plan(picked):
@@ -450,6 +488,80 @@ def build_plan(picked):
         plan.append(("pkg", "pkg install -y git", "toolchain for the clone steps"))
     plan.extend(others)
     return plan
+
+
+# The GUI talks to this engine over JSON. Parsing the pretty output would break
+# the moment a column width changed, so every command the app needs has a --json
+# form with a stable shape.
+def emit(obj):
+    print(json.dumps(obj, indent=1))
+
+
+def probe_all():
+    """Everything preflight knows, as a dict."""
+    pre = HERE / "preflight.sh"
+    keys = ["WTF_SDK", "WTF_RELEASE", "WTF_MODEL", "WTF_BRAND", "WTF_ARCH", "WTF_KERNEL",
+            "WTF_SELINUX", "WTF_ROOT", "WTF_SHIZUKU", "WTF_NETHUNTER", "WTF_USBHOST",
+            "WTF_NFC", "WTF_BLE", "WTF_TIER", "WTF_REPO", "WTF_TERMUX_VER"]
+    script = f'source "{pre}"; probe; ' + "; ".join(f'echo "{k}=${k}"' for k in keys)
+    out = {}
+    try:
+        r = subprocess.run(["bash", "-c", script], capture_output=True, text=True, timeout=30)
+        for line in r.stdout.splitlines():
+            k, _, v = line.partition("=")
+            if k in keys:
+                out[k] = v.strip()
+    except Exception:                                       # noqa: BLE001
+        pass
+    tri = lambda v: None if v not in ("0", "1") else v == "0"   # noqa: E731
+    return {
+        "sdk": int(out["WTF_SDK"]) if out.get("WTF_SDK", "").isdigit() else None,
+        "release": out.get("WTF_RELEASE") or None,
+        "model": out.get("WTF_MODEL") or None,
+        "brand": out.get("WTF_BRAND") or None,
+        "arch": out.get("WTF_ARCH") or None,
+        "kernel": out.get("WTF_KERNEL") or None,
+        "selinux": out.get("WTF_SELINUX") or None,
+        "root": out.get("WTF_ROOT") or "no",
+        "shizuku": out.get("WTF_SHIZUKU") or "no",
+        "nethunter": out.get("WTF_NETHUNTER") or "no",
+        "usbHost": tri(out.get("WTF_USBHOST", "")),
+        "nfc": tri(out.get("WTF_NFC", "")),
+        "ble": tri(out.get("WTF_BLE", "")),
+        "tier": int(out["WTF_TIER"]) if out.get("WTF_TIER", "").isdigit() else None,
+        "repo": out.get("WTF_REPO") or "unknown",
+        "termuxVersion": out.get("WTF_TERMUX_VER") or None,
+    }
+
+
+def cmd_doctor_json(_):
+    emit(probe_all())
+
+
+def cmd_catalogue_json(args):
+    bundles = load_bundles()
+    only = opt(args, "--bundle")
+    tools = []
+    for name, b in bundles.items():
+        if only and name != only:
+            continue
+        for t in b["tools"]:
+            tools.append({
+                "id": t["id"], "name": t["name"], "desc": t["desc"], "tier": t["tier"],
+                "bundle": name, "provider": t["install"][0]["provider"],
+                "flags": t.get("flags") or [], "license": t.get("license", "free"),
+                "notes": t.get("notes", ""), "upstream": t.get("upstream", ""),
+            })
+    emit({
+        "version": VERSION,
+        "bundles": [{"name": n, "description": b["description"], "count": len(b["tools"])}
+                    for n, b in bundles.items() if not only or n == only],
+        "profiles": [{"name": f.stem,
+                      "description": load_yaml(f).get("description", ""),
+                      "requiresTier": load_yaml(f).get("requires_tier", 0)}
+                     for f in sorted(PROFILES.glob("*.yaml"))],
+        "tools": tools,
+    })
 
 
 def cmd_version(_):
@@ -496,6 +608,11 @@ def main():
     cmd = argv[0] if argv else "help"
     table = {"list": cmd_list, "install": cmd_install, "catalogue": cmd_catalogue,
              "version": cmd_version, "help": cmd_help}
+    # --json swaps in the machine-readable variant of whichever command it is.
+    if "--json" in argv:
+        table["doctor"] = cmd_doctor_json
+        table["catalogue"] = cmd_catalogue_json
+        table["list"] = cmd_catalogue_json
     if cmd not in table:
         warn(f"unknown command: {cmd}")
         cmd_help(argv)
