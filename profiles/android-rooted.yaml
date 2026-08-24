@@ -24,6 +24,7 @@ bundles:
   - dev
   - device
   - network
+  - wireless
   - web
   - mobile
   - recon

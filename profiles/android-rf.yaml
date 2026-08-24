@@ -18,5 +18,6 @@ bundles:
   - core
   - dev
   - radio
+  - wireless
   - hardware
   - reporting

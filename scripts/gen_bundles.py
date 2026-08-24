@@ -141,8 +141,12 @@ def main():
         groups.setdefault(t["category"], []).append(t)
 
     OUT.mkdir(parents=True, exist_ok=True)
+    generated = {name for name, _ in BUNDLES.values()}
     for old in OUT.glob("*.yaml"):
-        old.unlink()
+        # Hand-authored bundles (smoke) are not derived from the website
+        # catalogue and must survive a regenerate.
+        if old.stem in generated:
+            old.unlink()
 
     written = 0
     for cat, tools in groups.items():

@@ -21,6 +21,7 @@ bundles:
   - dev
   - device
   - network
+  - wireless
   - web
   - recon
   - egress

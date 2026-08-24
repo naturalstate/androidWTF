@@ -3,6 +3,19 @@ description: >
   Wardriving and wireless attack tooling. Most of it needs a NetHunter kernel
   and an external adapter.
 tools:
+  - id: muon
+    name: Muon
+    desc: Terminal WiFi manager, first-party. Brings adapters up and down, toggles monitor mode, matches chipsets against a driver database, and puts 100+ wireless and pentest commands behind a menu with variable substitution — so you stop typing airodump-ng syntax from memory.
+    tier: 0
+    profiles: [stock, shizuku, rooted, nethunter]
+    status: maintained
+    upstream: naturalstate/muon
+    checked: 2026-08-23
+    flags: [essential]
+    notes: 'Single Python 3 file, no pip dependencies. Detects two modes at launch: full with root, limited without. In limited mode the root-only actions are greyed out rather than hidden, and you still get scanning, the command reference, the adapter/driver database and the troubleshooting guide. Termux limited mode also wants ''pkg install termux-api'' and the Termux:API app.'
+    install:
+      - {provider: git, id: 'https://github.com/naturalstate/muon'}
+
   - id: wifi-warden
     name: WiFi Warden
     desc: WPS analysis and network detail. Legally sensitive — connecting to a network you do not own is a CFAA problem regardless of how easy the app makes it.
