@@ -22,6 +22,7 @@ import dev.androidwtf.app.data.Catalogue
 import dev.androidwtf.app.data.Selection
 import dev.androidwtf.app.data.TIERS
 import dev.androidwtf.app.data.Tool
+import dev.androidwtf.app.data.Kind
 
 @Composable
 fun CatalogueScreen(
@@ -29,6 +30,7 @@ fun CatalogueScreen(
     sel: Selection,
     deviceTier: Int?,
     onOpenFilters: () -> Unit,
+    onOpenTool: (Tool) -> Unit,
 ) {
     val query by sel.query
     val shown = sel.filter(cat.tools)
@@ -86,7 +88,13 @@ fun CatalogueScreen(
         }
 
         items(shown, key = { it.id }) { tool ->
-            ToolRow(tool, sel.isPicked(tool.id), deviceTier) { sel.toggle(tool.id) }
+            ToolRow(
+                tool = tool,
+                picked = sel.isPicked(tool.id),
+                deviceTier = deviceTier,
+                onOpen = { onOpenTool(tool) },
+                onToggle = { sel.toggle(tool.id) },
+            )
         }
 
         if (shown.isEmpty()) {
@@ -100,7 +108,13 @@ fun CatalogueScreen(
 }
 
 @Composable
-private fun ToolRow(tool: Tool, picked: Boolean, deviceTier: Int?, onToggle: () -> Unit) {
+private fun ToolRow(
+    tool: Tool,
+    picked: Boolean,
+    deviceTier: Int?,
+    onOpen: () -> Unit,
+    onToggle: () -> Unit,
+) {
     val tooHigh = deviceTier != null && tool.tier > deviceTier
     val c = tierColour(tool.tier)
     Row(
@@ -112,7 +126,7 @@ private fun ToolRow(tool: Tool, picked: Boolean, deviceTier: Int?, onToggle: () 
                 if (picked) Accent.copy(alpha = 0.45f) else Line,
                 RoundedCornerShape(14.dp),
             )
-            .clickable { onToggle() }
+            .clickable { onOpen() }
             .padding(14.dp),
         verticalAlignment = Alignment.Top,
     ) {
@@ -122,6 +136,8 @@ private fun ToolRow(tool: Tool, picked: Boolean, deviceTier: Int?, onToggle: () 
         Column(Modifier.weight(1f)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 TierBadge(tool.tier)
+                Spacer(Modifier.width(6.dp))
+                KindBadge(tool.kind)
                 Spacer(Modifier.width(8.dp))
                 Text(
                     tool.name,
@@ -148,15 +164,24 @@ private fun ToolRow(tool: Tool, picked: Boolean, deviceTier: Int?, onToggle: () 
             }
         }
         Spacer(Modifier.width(10.dp))
-        Box(
-            Modifier
-                .size(28.dp)
-                .background(if (picked) Accent else Color.Transparent, RoundedCornerShape(9.dp))
-                .border(1.dp, if (picked) Accent else Line, RoundedCornerShape(9.dp)),
-            contentAlignment = Alignment.Center,
-        ) {
-            if (picked) Icon(Icons.Default.Check, null, tint = Color(0xFF06120B), modifier = Modifier.size(18.dp))
-            else Text("+", color = Muted)
+        if (tool.scriptable) {
+            Box(
+                Modifier
+                    .size(28.dp)
+                    .background(if (picked) Accent else Color.Transparent, RoundedCornerShape(9.dp))
+                    .border(1.dp, if (picked) Accent else Line, RoundedCornerShape(9.dp))
+                    .clickable { onToggle() },
+                contentAlignment = Alignment.Center,
+            ) {
+                if (picked) Icon(Icons.Default.Check, null, tint = Color(0xFF06120B), modifier = Modifier.size(18.dp))
+                else Text("+", color = Muted)
+            }
+        } else {
+            // Phone apps and workflows cannot be batch-installed, so offering a
+            // checkbox for them only sets up a silent no-op later.
+            Box(Modifier.size(28.dp), contentAlignment = Alignment.Center) {
+                Text("›", color = Muted, style = MaterialTheme.typography.titleMedium)
+            }
         }
     }
 }

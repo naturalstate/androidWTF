@@ -15,8 +15,8 @@ android {
         // packages, so the app should not be the thing that excludes old phones.
         minSdk = 24
         targetSdk = 35
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = 3
+        versionName = "0.1.2"
     }
 
     buildTypes {

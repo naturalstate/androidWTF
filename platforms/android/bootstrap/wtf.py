@@ -494,6 +494,14 @@ def build_plan(picked):
         plan.append(("pkg", "pkg install -y python", "toolchain for the pip steps"))
     if any(k == "go" for k, _, _ in others):
         plan.append(("pkg", "pkg install -y golang", "toolchain for the go steps"))
+        # go install drops binaries in ~/go/bin, which is NOT on Termux's default
+        # PATH. Without this the tool installs successfully and then cannot be
+        # run by name, which reads like a failed install.
+        plan.append((
+            "sh",
+            'grep -qs "go/bin" "$HOME/.bashrc" || '
+            'printf \'\\nexport PATH="$HOME/go/bin:$PATH"\\n\' >> "$HOME/.bashrc"',
+            "put ~/go/bin on PATH (new shells)"))
     if any(k == "git" for k, _, _ in others):
         plan.append(("pkg", "pkg install -y git", "toolchain for the clone steps"))
     plan.extend(others)
@@ -559,6 +567,7 @@ def cmd_catalogue_json(args):
             tools.append({
                 "id": t["id"], "name": t["name"], "desc": t["desc"], "tier": t["tier"],
                 "bundle": name, "provider": t["install"][0]["provider"],
+                "package": str(t["install"][0].get("id", "")),
                 "flags": t.get("flags") or [], "license": t.get("license", "free"),
                 "notes": t.get("notes", ""), "upstream": t.get("upstream", ""),
             })

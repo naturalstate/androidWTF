@@ -1,6 +1,7 @@
 package dev.androidwtf.app.data
 
 import android.content.Context
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
@@ -20,14 +21,64 @@ data class Tool(
     val tier: Int,
     val bundle: String,
     val provider: String,
+    @SerialName("package") val package_: String = "",
     val flags: List<String> = emptyList(),
     val license: String = "free",
     val notes: String = "",
     val upstream: String = "",
 ) {
     val essential get() = "essential" in flags
+
     /** Whether the engine can install this unattended, or it needs a human tap. */
     val scriptable get() = provider in setOf("pkg", "pip", "go", "git")
+
+    /**
+     * A terminal tool or a phone app.
+     *
+     * Browsing the catalogue gave no way to tell these apart, so a command-line
+     * scanner and an APK looked like the same kind of thing — and tapping
+     * Install on an APK entry appeared to do nothing.
+     */
+    val kind: Kind
+        get() = when (provider) {
+            "pkg", "pip", "go", "git" -> Kind.Cli
+            "obtainium", "fdroid", "github", "play", "nethunter", "androidwtf" -> Kind.App
+            else -> Kind.Guide
+        }
+
+    /** Where it lands, because finding it afterwards is half the battle. */
+    val installsTo: String?
+        get() = when (provider) {
+            "pkg", "pip" -> "$PREFIX/bin/"
+            "go" -> "~/go/bin/"
+            "git" -> "~/wtf/src/${package_.trimEnd('/').substringAfterLast('/').removeSuffix(".git")}/"
+            else -> null
+        }
+
+    /** How you actually run it once installed. */
+    val howToRun: String?
+        get() = when (provider) {
+            "pkg", "pip" -> "$name  (already on PATH)"
+            "go" -> "$name  (needs ~/go/bin on PATH — the installer adds it)"
+            "git" -> "cd ~/wtf/src/${package_.trimEnd('/').substringAfterLast('/')} then read its README"
+            else -> null
+        }
+
+    companion object { const val PREFIX = "\$PREFIX" }
+}
+
+enum class Kind { Cli, App, Guide }
+
+val Kind.label get() = when (this) {
+    Kind.Cli -> "CLI"
+    Kind.App -> "APP"
+    Kind.Guide -> "GUIDE"
+}
+
+val Kind.blurb get() = when (this) {
+    Kind.Cli -> "Terminal tool. Runs inside Termux."
+    Kind.App -> "Phone app. Installed from a store, one tap each."
+    Kind.Guide -> "Not an install — a documented workflow or reference."
 }
 
 @Serializable

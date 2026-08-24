@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,6 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import dev.androidwtf.app.data.Catalogue
 import dev.androidwtf.app.data.Selection
+import dev.androidwtf.app.data.Tool
 import dev.androidwtf.app.termux.Termux
 import dev.androidwtf.app.termux.TermuxResults
 import dev.androidwtf.app.termux.TermuxState
@@ -34,7 +36,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-private enum class Tab { Home, Catalogue }
+private enum class Tab { Home, Catalogue, Setup }
 
 @Composable
 private fun App(cat: Catalogue) {
@@ -47,7 +49,11 @@ private fun App(cat: Catalogue) {
     // returns through a PendingIntent.
     val deviceTier: Int? = TermuxResults.deviceTier
     var showFilters by remember { mutableStateOf(false) }
+    var detail by remember { mutableStateOf<Tool?>(null) }
     val lastResult = TermuxResults.last
+    val version = try {
+        ctx.packageManager.getPackageInfo(ctx.packageName, 0).versionName ?: "?"
+    } catch (_: Exception) { "?" }
 
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -62,6 +68,17 @@ private fun App(cat: Catalogue) {
                     onClick = { tab = Tab.Home },
                     icon = { Icon(Icons.Default.Home, null) },
                     label = { Text("Home") },
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = Accent, selectedTextColor = Accent,
+                        unselectedIconColor = Muted, unselectedTextColor = Muted,
+                        indicatorColor = Accent.copy(alpha = 0.14f),
+                    ),
+                )
+                NavigationBarItem(
+                    selected = tab == Tab.Setup,
+                    onClick = { tab = Tab.Setup },
+                    icon = { Icon(Icons.Default.Settings, null) },
+                    label = { Text("Setup") },
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = Accent, selectedTextColor = Accent,
                         unselectedIconColor = Muted, unselectedTextColor = Muted,
@@ -95,9 +112,30 @@ private fun App(cat: Catalogue) {
                     onOpenProfile = { p -> Termux.installProfile(ctx, p.name, dryRun = true) },
                     onBrowse = { tab = Tab.Catalogue },
                 )
-                Tab.Catalogue -> CatalogueScreen(cat, sel, deviceTier) { showFilters = true }
+                Tab.Catalogue -> CatalogueScreen(
+                    cat = cat,
+                    sel = sel,
+                    deviceTier = deviceTier,
+                    onOpenFilters = { showFilters = true },
+                    onOpenTool = { detail = it },
+                )
+                Tab.Setup -> SetupScreen(
+                    version = version,
+                    tier = deviceTier,
+                    deviceSummary = TermuxResults.deviceSummary,
+                    onRunDoctor = { Termux.doctor(ctx) },
+                )
             }
 
+            detail?.let { t ->
+                ToolSheet(
+                    tool = t,
+                    picked = sel.isPicked(t.id),
+                    deviceTier = deviceTier,
+                    onToggle = { sel.toggle(t.id) },
+                    onDismiss = { detail = null },
+                )
+            }
             if (showFilters) {
                 FilterSheet(sel, cat.bundles, deviceTier) { showFilters = false }
             }
